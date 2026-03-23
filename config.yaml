@@ -34,9 +34,9 @@ search:
 
 # LLM 配置
 llm:
-  model: "deepseek-chat"
+  model: "GLM-4.7-Flash"
   language: "中文"
-  base_url: "https://api.deepseek.com/v1"
+  base_url: "https://open.bigmodel.cn/api/paas/v4"
 
 # 邮件配置
 email:

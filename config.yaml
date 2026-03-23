@@ -5,6 +5,7 @@
 search:
   categories:
     - cs.SE
+    - cs.AI
 
   keywords:
     - "Goedel-Code-Prover"
@@ -14,7 +15,7 @@ search:
 # "query" - 分类+关键字一起发给arXiv查询d_mode: "none"
   keyword_mode: "none"
 
-  max_papers: 100
+  max_papers: 300
 
   # ── 日期控制 ──
   # "yesterday" = 只抓昨天的论文（推荐，配合凌晨定时任务）

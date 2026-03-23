@@ -2,11 +2,10 @@
 """
 ArXiv Daily Paper Digest
 抓取 arXiv 论文 → LLM 翻译总结 → 邮件推送
-输出仅包含：
-- 英文标题
-- 中文标题
-- 一句话总结
-- 摘要全文翻译
+
+调度逻辑：
+  - 每天凌晨运行，抓取「昨天」的论文
+  - 周日、周一自动跳过（arXiv 周末不更新）
 """
 
 import os
@@ -17,7 +16,7 @@ import yaml
 import arxiv
 import logging
 import smtplib
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 from zoneinfo import ZoneInfo
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -31,9 +30,25 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ── 星期名映射（用于日志） ──
+WEEKDAY_NAMES = {
+    0: "周一 Monday",
+    1: "周二 Tuesday",
+    2: "周三 Wednesday",
+    3: "周四 Thursday",
+    4: "周五 Friday",
+    5: "周六 Saturday",
+    6: "周日 Sunday",
+}
+
+# arXiv 不更新的日子：周六(5) 和 周日(6)
+# 因此，次日（周日和周一）没有新论文可抓
+ARXIV_NO_UPDATE_NEXT_DAYS = {0, 6}  # 周一(0)=前天是周六无更新, 周日(6)=前天是周五但昨天周六无更新
+# 更准确地说：周日跳过是因为昨天(周六)arXiv没更新；周一跳过是因为昨天(周日)arXiv没更新
+
 
 # ══════════════════════════════════════════════════
-#  1. 加载配置
+#  1. 加载配置 & 工具函数
 # ══════════════════════════════════════════════════
 def load_config(path: str = "config.yaml") -> dict:
     with open(path, "r", encoding="utf-8") as f:
@@ -57,23 +72,84 @@ def get_search_timezone(config: dict):
         return timezone.utc
 
 
-def within_days_by_date(dt: datetime, days_back: int, tz) -> bool:
+# ══════════════════════════════════════════════════
+#  2. ★ 调度判断：今天是否应该运行
+# ══════════════════════════════════════════════════
+def should_run_today(config: dict) -> tuple[bool, str]:
     """
-    days_back = 0 -> 仅今天
-    days_back = 1 -> 今天 + 昨天
-    days_back = 2 -> 今天 + 昨天 + 前天
-    """
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+    判断今天是否应该运行
 
-    local_dt = dt.astimezone(tz)
-    today = datetime.now(tz).date()
-    cutoff_date = today - timedelta(days=days_back)
-    return local_dt.date() >= cutoff_date
+    返回: (是否运行, 原因说明)
+
+    逻辑：
+      - 周日跳过：昨天是周六，arXiv 不更新
+      - 周一跳过：昨天是周日，arXiv 不更新
+      - 其他日子正常运行
+    """
+    sc = config.get("search", {})
+    skip_enabled = sc.get("skip_no_arxiv_days", True)
+
+    # 如果没开启跳过，始终运行
+    if not skip_enabled:
+        return True, "skip_no_arxiv_days 未开启，始终运行"
+
+    # 环境变量强制运行（手动触发时可用）
+    force_run = os.environ.get("FORCE_RUN", "false").lower()
+    if force_run == "true":
+        return True, "FORCE_RUN=true，强制运行"
+
+    tz = get_search_timezone(config)
+    now = datetime.now(tz)
+    weekday = now.weekday()  # 0=周一, 6=周日
+    day_name = WEEKDAY_NAMES.get(weekday, str(weekday))
+
+    if weekday == 6:  # 周日
+        return False, f"今天是{day_name}，昨天(周六)arXiv 不更新，跳过"
+    elif weekday == 0:  # 周一
+        return False, f"今天是{day_name}，昨天(周日)arXiv 不更新，跳过"
+    else:
+        return True, f"今天是{day_name}，正常运行"
 
 
 # ══════════════════════════════════════════════════
-#  2. 抓取 arXiv 论文
+#  3. ★ 计算目标日期范围
+# ══════════════════════════════════════════════════
+def get_target_date_range(config: dict) -> tuple[date, date]:
+    """
+    根据 fetch_mode 计算要抓取的日期范围 [start_date, end_date]
+
+    fetch_mode:
+      - "yesterday": 只抓昨天
+      - "today":     只抓今天
+      - "custom":    使用 days_back
+    """
+    sc = config.get("search", {})
+    tz = get_search_timezone(config)
+    now = datetime.now(tz)
+    today = now.date()
+
+    fetch_mode = sc.get("fetch_mode", "yesterday")
+
+    if fetch_mode == "yesterday":
+        yesterday = today - timedelta(days=1)
+        return yesterday, yesterday
+
+    elif fetch_mode == "today":
+        return today, today
+
+    elif fetch_mode == "custom":
+        days_back = int(os.environ.get("DAYS_BACK", sc.get("days_back", 1)))
+        start = today - timedelta(days=days_back)
+        return start, today
+
+    else:
+        logger.warning(f"⚠️ 未知 fetch_mode: {fetch_mode}，默认使用 yesterday")
+        yesterday = today - timedelta(days=1)
+        return yesterday, yesterday
+
+
+# ══════════════════════════════════════════════════
+#  4. 抓取 arXiv 论文
 # ══════════════════════════════════════════════════
 def build_query(keywords: list[str], categories: list[str], keyword_mode: str = "none") -> str:
     if not categories:
@@ -106,20 +182,16 @@ def fetch_papers(config: dict) -> list[dict]:
     keywords = normalize_list(sc.get("keywords", []))
     categories = normalize_list(sc.get("categories", []))
     max_papers = int(sc.get("max_papers", 10))
-    days_back = int(os.environ.get("DAYS_BACK", sc.get("days_back", 0)))
     keyword_mode = sc.get("keyword_mode", "none")
     tz = get_search_timezone(config)
 
-    if days_back < 0:
-        raise ValueError("days_back 不能小于 0")
-
     query = build_query(keywords, categories, keyword_mode)
 
-    today = datetime.now(tz).date()
-    cutoff_date = today - timedelta(days=days_back)
+    # ★ 使用新的日期范围计算
+    start_date, end_date = get_target_date_range(config)
 
     logger.info(f"🔍 arXiv query: {query}")
-    logger.info(f"📅 日期范围(自然日, {tz}): {cutoff_date} ~ {today}")
+    logger.info(f"📅 目标日期范围 ({tz}): {start_date} ~ {end_date}")
     logger.info(f"🔧 关键字模式: {keyword_mode}")
     logger.info(f"📌 最大论文数: {max_papers}")
     if keyword_mode == "filter" and keywords:
@@ -159,20 +231,30 @@ def fetch_papers(config: dict) -> list[dict]:
             pub = pub.replace(tzinfo=timezone.utc)
 
         pub_local = pub.astimezone(tz)
+        pub_date = pub_local.date()
 
-        if not within_days_by_date(pub, days_back, tz):
-            skipped_by_date += 1
-            if pub_local.date() < cutoff_date:
-                logger.info(f"⏹️ 遇到早于 cutoff 的论文，停止继续扫描: {pub_local.date()} < {cutoff_date}")
-                break
+        # ★ 精确日期范围过滤
+        if pub_date > end_date:
+            # 比目标范围还新，跳过（理论上不太会出现）
             continue
+
+        if pub_date < start_date:
+            skipped_by_date += 1
+            logger.info(
+                f"⏹️ 遇到早于目标范围的论文，停止: {pub_date} < {start_date}"
+            )
+            break
 
         paper = {
             "title": result.title.replace("\n", " "),
             "abstract": result.summary.replace("\n", " "),
             "authors": [a.name for a in result.authors],
             "published": pub_local.strftime("%Y-%m-%d"),
-            "updated": result.updated.astimezone(tz).strftime("%Y-%m-%d") if result.updated else "",
+            "updated": (
+                result.updated.astimezone(tz).strftime("%Y-%m-%d")
+                if result.updated
+                else ""
+            ),
             "url": result.entry_id,
             "pdf_url": result.pdf_url,
             "categories": result.categories,
@@ -187,10 +269,10 @@ def fetch_papers(config: dict) -> list[dict]:
             paper["matched_keywords"] = matched
 
         papers.append(paper)
-        logger.info(f"✅ 收录: {paper['published']} | {paper['title'][:80]}")
+        logger.info(f"  ✅ 收录: {paper['published']} | {paper['title'][:80]}")
 
         if len(papers) >= max_papers:
-            logger.info(f"📌 已达到 max_papers={max_papers} 上限，停止获取")
+            logger.info(f"📌 已达到 max_papers={max_papers} 上限")
             break
 
     logger.info(
@@ -205,7 +287,7 @@ def fetch_papers(config: dict) -> list[dict]:
 
 
 # ══════════════════════════════════════════════════
-#  3. LLM 翻译 & 总结
+#  5. LLM 翻译 & 总结
 # ══════════════════════════════════════════════════
 SUMMARY_PROMPT = """请你作为一位资深 AI 研究员，用{language}对以下学术论文进行分析。
 
@@ -266,11 +348,9 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                 logger.info(f"  ✅ 总结完整 (第{attempt}次)")
                 return content
             else:
-                logger.warning(f"  ⚠️ 第{attempt}次总结不完整，缺少: {missing}")
+                logger.warning(f"  ⚠️ 第{attempt}次不完整，缺少: {missing}")
                 if attempt < max_retries:
-                    wait_seconds = 2 * attempt
-                    logger.info(f"  ⏳ {wait_seconds}s 后重试（格式不完整）")
-                    time.sleep(wait_seconds)
+                    time.sleep(2 * attempt)
                     continue
                 else:
                     logger.warning("  ⚠️ 已达最大重试次数，使用不完整结果")
@@ -278,56 +358,28 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
 
         except Exception as e:
             err_text = str(e)
-            is_rate_limit = ("429" in err_text) or ("Too Many Requests" in err_text)
+            is_rate_limit = "429" in err_text or "Too Many Requests" in err_text
 
             if is_rate_limit:
-                wait_seconds = min(60, 5 * (2 ** (attempt - 1)))  # 5,10,20,40,60
-                logger.warning(f"  ⚠️ 第{attempt}次调用触发限流 [{paper['title'][:40]}]: {e}")
+                wait_seconds = min(60, 5 * (2 ** (attempt - 1)))
+                logger.warning(f"  ⚠️ 第{attempt}次限流: {e}")
                 if attempt < max_retries:
-                    logger.info(f"  ⏳ 限流退避，等待 {wait_seconds}s 后重试")
+                    logger.info(f"  ⏳ 限流退避 {wait_seconds}s")
                     time.sleep(wait_seconds)
                     continue
-                else:
-                    return f"""### 📌 中文标题
-生成失败
-
-### 💡 一句话总结
-触发限流（429），已重试{max_retries}次。
-
-### 📋 摘要中文全文
-总结生成失败，请稍后重试。
-"""
-
-            logger.error(f"  ❌ 第{attempt}次调用失败 [{paper['title'][:40]}]: {e}")
-            if attempt < max_retries:
-                wait_seconds = min(20, 3 * attempt)
-                logger.info(f"  ⏳ {wait_seconds}s 后重试")
-                time.sleep(wait_seconds)
-                continue
             else:
-                return f"""### 📌 中文标题
-生成失败
+                logger.error(f"  ❌ 第{attempt}次失败: {e}")
+                if attempt < max_retries:
+                    time.sleep(3 * attempt)
+                    continue
 
-### 💡 一句话总结
-总结生成失败。
+            return f"""### 📌 中文标题\n生成失败\n\n### 💡 一句话总结\n总结生成失败（已重试{max_retries}次）\n\n### 📋 摘要中文全文\n错误：{e}"""
 
-### 📋 摘要中文全文
-错误信息：{e}
-"""
-
-    return """### 📌 中文标题
-生成失败
-
-### 💡 一句话总结
-总结生成失败。
-
-### 📋 摘要中文全文
-未知错误。
-"""
+    return "⚠️ 总结生成失败"
 
 
 # ══════════════════════════════════════════════════
-#  4. 解析 & 构建 HTML
+#  6. 解析 & 构建 HTML
 # ══════════════════════════════════════════════════
 def extract_section(text: str, emoji_and_name: str) -> str:
     pattern = rf"###\s*{re.escape(emoji_and_name)}\s*\n+(.*?)(?=\n\s*###|\Z)"
@@ -340,14 +392,10 @@ def extract_section(text: str, emoji_and_name: str) -> str:
 
 
 def parse_summary(summary_text: str) -> dict:
-    chinese_title = extract_section(summary_text, "📌 中文标题")
-    one_line = extract_section(summary_text, "💡 一句话总结")
-    abstract_cn = extract_section(summary_text, "📋 摘要中文全文")
-
     return {
-        "chinese_title": chinese_title,
-        "one_line": one_line,
-        "abstract_cn": abstract_cn,
+        "chinese_title": extract_section(summary_text, "📌 中文标题"),
+        "one_line": extract_section(summary_text, "💡 一句话总结"),
+        "abstract_cn": extract_section(summary_text, "📋 摘要中文全文"),
     }
 
 
@@ -357,7 +405,10 @@ def highlight_keywords(text: str, keywords: list[str]) -> str:
     for kw in keywords:
         pattern = re.compile(re.escape(kw), re.IGNORECASE)
         text = pattern.sub(
-            lambda m: f'<mark style="background:#fff3cd;padding:1px 3px;border-radius:3px;">{m.group()}</mark>',
+            lambda m: (
+                f'<mark style="background:#fff3cd;padding:1px 3px;'
+                f'border-radius:3px;">{m.group()}</mark>'
+            ),
             text,
         )
     return text
@@ -366,8 +417,7 @@ def highlight_keywords(text: str, keywords: list[str]) -> str:
 def text_to_html_paragraphs(text: str) -> str:
     if not text:
         return ""
-    text = text.strip()
-    paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
+    paragraphs = [p.strip() for p in text.strip().split("\n") if p.strip()]
     if not paragraphs:
         return ""
     return "\n".join(
@@ -377,26 +427,30 @@ def text_to_html_paragraphs(text: str) -> str:
 
 
 def build_html(papers: list[dict], summaries: list[str], config: dict) -> str:
-    date_str = datetime.now().strftime("%Y年%m月%d日")
     sc = config["search"]
+    tz = get_search_timezone(config)
+    now = datetime.now(tz)
+    date_str = now.strftime("%Y年%m月%d日")
+    weekday_str = WEEKDAY_NAMES.get(now.weekday(), "")
+
     keywords = normalize_list(sc.get("keywords", []))
     keyword_mode = sc.get("keyword_mode", "none")
     categories = normalize_list(sc.get("categories", []))
-    days_back = int(sc.get("days_back", 0))
-    tz_name = sc.get("timezone", "UTC")
+    fetch_mode = sc.get("fetch_mode", "yesterday")
 
-    search_info_parts = []
+    # ★ 显示实际抓取的目标日期
+    start_date, end_date = get_target_date_range(config)
+    if start_date == end_date:
+        date_range_str = f"论文日期: {start_date}"
+    else:
+        date_range_str = f"论文日期: {start_date} ~ {end_date}"
+
+    search_info_parts = [date_range_str]
     if categories:
         search_info_parts.append(f"分类: {', '.join(categories)}")
-    search_info_parts.append(f"days_back: {days_back}")
-    search_info_parts.append(f"时区: {tz_name}")
-
     if keyword_mode == "filter" and keywords:
-        search_info_parts.append(f"关键字过滤: {', '.join(keywords)}")
-    elif keyword_mode == "query" and keywords:
-        search_info_parts.append(f"关键字查询: {', '.join(keywords)}")
-
-    search_info = " | ".join(search_info_parts) if search_info_parts else "全部"
+        search_info_parts.append(f"过滤: {', '.join(keywords)}")
+    search_info = " | ".join(search_info_parts)
 
     cards = ""
     for i, (p, s) in enumerate(zip(papers, summaries), 1):
@@ -444,13 +498,7 @@ def build_html(papers: list[dict], summaries: list[str], config: dict) -> str:
 
         abstract_html = ""
         if abstract_cn:
-            abstract_html = (
-                f'<div style="margin-top:12px;">'
-                f'<div style="font-size:14px;font-weight:700;color:#2c3e50;margin-bottom:8px;">'
-                f'📋 摘要中文全文</div>'
-                f'{text_to_html_paragraphs(abstract_cn)}'
-                f'</div>'
-            )
+            abstract_html = text_to_html_paragraphs(abstract_cn)
 
         cards += f"""
     <div style="background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;
@@ -464,27 +512,56 @@ def build_html(papers: list[dict], summaries: list[str], config: dict) -> str:
         </div>
 
         {cn_title_html}
-
         {kw_tags}
 
         <div style="color:#888;font-size:12px;margin-bottom:14px;padding-bottom:12px;
                     border-bottom:1px solid #f0f0f0;margin-top:10px;">
             👤 {authors} &nbsp;|&nbsp; 📅 {p['published']} &nbsp;|&nbsp; 🏷️ {cats}<br>
-            🔗 <a href="{p['url']}" style="color:#667eea;text-decoration:none;">arXiv 页面</a>
+            🔗 <a href="{p['url']}" style="color:#667eea;text-decoration:none;">arXiv</a>
             &nbsp;·&nbsp;
-            📄 <a href="{p['pdf_url']}" style="color:#667eea;text-decoration:none;">PDF 下载</a>
+            📄 <a href="{p['pdf_url']}" style="color:#667eea;text-decoration:none;">PDF</a>
         </div>
 
         {one_line_html}
-        {abstract_html}
-    </div>
-"""
+
+        <details style="cursor:pointer;margin-top:8px;">
+            <summary style="font-size:14px;font-weight:600;color:#667eea;
+                            padding:8px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span style="display:inline-flex;align-items:center;gap:6px;">
+                    📋 展开摘要全文
+                </span>
+            </summary>
+            <div style="font-size:14px;line-height:1.8;color:#333;
+                        margin-top:12px;padding:14px;background:#fafbfc;
+                        border-radius:8px;border:1px solid #f0f0f0;">
+                {abstract_html}
+            </div>
+        </details>
+    </div>"""
+
+    style_block = """
+    <style>
+        details summary::-webkit-details-marker { display: none; }
+        details summary::before {
+            content: "▶ ";
+            font-size: 12px;
+            margin-right: 4px;
+        }
+        details[open] summary::before {
+            content: "▼ ";
+        }
+        details[open] summary {
+            color: #764ba2 !important;
+        }
+    </style>
+    """
 
     html = f"""<!DOCTYPE html>
-<html>
-<head>
+<html><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+{style_block}
 </head>
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC',
              'Microsoft YaHei',sans-serif;background:#f4f5f7;margin:0;padding:20px;">
@@ -493,7 +570,9 @@ def build_html(papers: list[dict], summaries: list[str], config: dict) -> str:
     <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;
                 padding:36px 32px;border-radius:12px;text-align:center;margin-bottom:24px;">
         <h1 style="margin:0;font-size:28px;font-weight:700;">📚 每日 ArXiv 论文精选</h1>
-        <p style="margin:12px 0 0;opacity:.9;font-size:16px;">{date_str} · 共 {len(papers)} 篇论文</p>
+        <p style="margin:12px 0 0;opacity:.9;font-size:16px;">
+            {date_str} {weekday_str} · 共 {len(papers)} 篇论文
+        </p>
         <p style="margin:8px 0 0;font-size:12px;opacity:.65;">🔍 {search_info}</p>
     </div>
 
@@ -504,14 +583,13 @@ def build_html(papers: list[dict], summaries: list[str], config: dict) -> str:
         Powered by GitHub Actions + LLM
     </div>
 </div>
-</body>
-</html>"""
+</body></html>"""
 
     return html
 
 
 # ══════════════════════════════════════════════════
-#  5. 发送邮件
+#  7. 发送邮件
 # ══════════════════════════════════════════════════
 def send_email(html: str, config: dict) -> bool:
     ec = config["email"]
@@ -550,7 +628,7 @@ def send_email(html: str, config: dict) -> bool:
 
 
 # ══════════════════════════════════════════════════
-#  6. 主函数
+#  8. ★ 主函数（含调度判断）
 # ══════════════════════════════════════════════════
 def main():
     logger.info("=" * 55)
@@ -558,30 +636,46 @@ def main():
     logger.info("=" * 55)
 
     config = load_config()
+    tz = get_search_timezone(config)
+    now = datetime.now(tz)
 
+    logger.info(f"⏰ 当前时间: {now.strftime('%Y-%m-%d %H:%M %Z')} ({WEEKDAY_NAMES.get(now.weekday(), '')})")
+
+    # ── ★ Step 0: 检查今天是否应该运行 ──
+    run_ok, reason = should_run_today(config)
+    logger.info(f"📋 调度判断: {reason}")
+
+    if not run_ok:
+        logger.info("🛌 今天不需要运行，退出")
+        logger.info("=" * 55)
+        return
+
+    # ── Step 1: 计算目标日期 ──
+    start_date, end_date = get_target_date_range(config)
+    logger.info(f"🎯 抓取目标: {start_date} ~ {end_date}")
+
+    # ── Step 2: 抓取论文 ──
     papers = fetch_papers(config)
 
     if not papers:
-        logger.warning("📭 今日未找到匹配的论文")
+        logger.warning("📭 未找到匹配的论文")
         sc = config["search"]
         keyword_mode = sc.get("keyword_mode", "none")
 
         info_text = f"分类: {', '.join(normalize_list(sc.get('categories', [])))}"
-        info_text += f"<br>days_back: {sc.get('days_back', 0)}"
-        info_text += f"<br>timezone: {sc.get('timezone', 'UTC')}"
-
+        info_text += f"<br>目标日期: {start_date} ~ {end_date}"
         if keyword_mode == "filter":
             info_text += f"<br>关键词过滤: {', '.join(normalize_list(sc.get('keywords', [])))}"
 
         empty_html = f"""<html><body style="font-family:Arial;padding:40px;text-align:center;">
-        <h2>📭 今日暂无匹配论文</h2>
+        <h2>📭 {start_date} 暂无匹配论文</h2>
         <p>{info_text}</p>
-        <p>日期: {datetime.now().strftime('%Y-%m-%d')}</p>
-        <p style="color:#999;font-size:12px;">这可能是因为当日没有新论文，或日期/关键词筛选较严格</p>
+        <p style="color:#999;font-size:12px;">arXiv 周末不更新，节假日也可能延迟</p>
         </body></html>"""
         send_email(empty_html, config)
         return
 
+    # ── Step 3: LLM 总结 ──
     lc = config["llm"]
     api_key = os.environ.get("OPENAI_API_KEY", "")
     base_url = os.environ.get("OPENAI_BASE_URL", lc.get("base_url"))
@@ -611,17 +705,19 @@ def main():
         summaries.append(s)
 
         if i < len(papers):
-            logger.info(f"  ⏳ 等待 {llm_interval}s，避免触发模型限流...")
+            logger.info(f"  ⏳ 等待 {llm_interval}s")
             time.sleep(llm_interval)
 
+    # ── Step 4: 生成 HTML ──
     html = build_html(papers, summaries, config)
 
     os.makedirs("output", exist_ok=True)
-    out_path = f"output/digest_{datetime.now().strftime('%Y%m%d')}.html"
+    out_path = f"output/digest_{start_date.strftime('%Y%m%d')}.html"
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
     logger.info(f"💾 已保存至 {out_path}")
 
+    # ── Step 5: 发送邮件 ──
     send_email(html, config)
 
     logger.info("🎉 全部完成！")

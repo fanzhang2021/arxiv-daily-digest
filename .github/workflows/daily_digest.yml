@@ -2,21 +2,27 @@ name: 📚 Daily ArXiv Digest
 
 on:
   schedule:
-    # 每天北京时间早上 8:00 运行（UTC 0:00）
-    - cron: "0 0 * * *"
+    # ── 北京时间 周二~周六 凌晨 1:00 运行 ──
+    # 北京 01:00 = UTC 前一天 17:00
+    # UTC 周一~周五 17:00 = 北京 周二~周六 01:00
+    - cron: "0 17 * * 1-5"
 
-  # 允许手动触发（用于测试）
+  # 手动触发（测试用，可以选择强制运行）
   workflow_dispatch:
     inputs:
-      days_back:
-        description: "往回搜索天数"
+      force_run:
+        description: "强制运行（忽略周末跳过逻辑）"
         required: false
-        default: "2"
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 jobs:
   digest:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
       - name: 📥 Checkout
@@ -40,7 +46,7 @@ jobs:
           TO_EMAIL:        ${{ secrets.TO_EMAIL }}
           SMTP_SERVER:     ${{ secrets.SMTP_SERVER }}
           SMTP_PORT:       ${{ secrets.SMTP_PORT }}
-          DAYS_BACK:       ${{ github.event.inputs.days_back || '' }}
+          FORCE_RUN:       ${{ github.event.inputs.force_run || 'false' }}
         run: python main.py
 
       - name: 📎 Upload artifact

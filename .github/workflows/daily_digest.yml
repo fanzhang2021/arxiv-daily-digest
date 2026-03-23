@@ -49,6 +49,7 @@ jobs:
           FORCE_RUN:       ${{ github.event.inputs.force_run || 'false' }}
           LLM_INTERVAL_SECONDS: "0"
           LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          LLM_INTERVAL_SECONDS: ${{ secrets.LLM_INTERVAL_SECONDS }}
         run: python main.py
 
       - name: 📎 Upload artifact

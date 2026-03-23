@@ -7,8 +7,11 @@ search:
     - cs.SE
 
   keywords:
-    - "Multi-Camera"
+    - "Goedel-Code-Prover"
 
+# "none" - 只按分类搜索，完全忽略关键字
+# "filter" - 按分类搜索，用关键字本地过滤（推荐，精准）
+# "query" - 分类+关键字一起发给arXiv查询d_mode: "none"
   keyword_mode: "none"
 
   max_papers: 100
@@ -20,7 +23,7 @@ search:
   fetch_mode: "custom"
 
   # 仅 fetch_mode: "custom" 时生效
-  days_back: 2
+  days_back: 3
 
   timezone: "Asia/Shanghai"
 

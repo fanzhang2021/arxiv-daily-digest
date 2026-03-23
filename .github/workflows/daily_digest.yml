@@ -1,0 +1,52 @@
+name: 📚 Daily ArXiv Digest
+
+on:
+  schedule:
+    # 每天北京时间早上 8:00 运行（UTC 0:00）
+    - cron: "0 0 * * *"
+
+  # 允许手动触发（用于测试）
+  workflow_dispatch:
+    inputs:
+      days_back:
+        description: "往回搜索天数"
+        required: false
+        default: "2"
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: 📦 Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: 🚀 Run digest
+        env:
+          OPENAI_API_KEY:  ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          EMAIL_ADDRESS:   ${{ secrets.EMAIL_ADDRESS }}
+          EMAIL_PASSWORD:  ${{ secrets.EMAIL_PASSWORD }}
+          TO_EMAIL:        ${{ secrets.TO_EMAIL }}
+          SMTP_SERVER:     ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT:       ${{ secrets.SMTP_PORT }}
+          DAYS_BACK:       ${{ github.event.inputs.days_back || '' }}
+        run: python main.py
+
+      - name: 📎 Upload artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ github.run_number }}
+          path: output/
+          retention-days: 30

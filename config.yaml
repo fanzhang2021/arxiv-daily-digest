@@ -1,0 +1,44 @@
+# ============================================
+# ArXiv Daily Digest 配置文件
+# ============================================
+
+search:
+  categories:
+    - cs.SE
+
+  keywords:
+    - "Multi-Camera"
+
+  # "none"   - 只按分类搜索，完全忽略关键字
+  # "filter" - 按分类搜索，用关键字本地过滤（推荐，精准）
+  # "query"  - 分类+关键字一起发给arXiv查询
+  keyword_mode: "none"
+
+  # 每次最多抓取论文数
+  max_papers: 100
+
+  # days_back:
+  # 0 = 只抓今天
+  # 1 = 今天 + 昨天
+  # 2 = 今天 + 昨天 + 前天
+  days_back: 0
+
+  # 新增：按哪个时区定义“今天”
+  timezone: "Asia/Shanghai"
+
+# LLM 配置
+# llm:
+#   model: "GLM-4.7-Flash"
+#   language: "中文"
+#   base_url: "https://open.bigmodel.cn/api/paas/v4"
+
+llm:
+  model: "deepseek-chat"
+  language: "中文"
+  base_url: "https://api.deepseek.com/v1"
+
+# 邮件配置
+email:
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  subject_prefix: "📚 每日ArXiv论文精选"

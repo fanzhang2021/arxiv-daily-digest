@@ -1,9 +1,9 @@
 ﻿# env_config.ps1 - 环境变量配置文件
 
 # 设置环境变量
-$env:OPENAI_API_KEY = "5a62436b582241baafa0f9ef1e1cb795.QTesPEx6CtgZIGX4"
-$env:EMAIL_ADDRESS = "fanzhanghnu@gmail.com"
-$env:EMAIL_PASSWORD = "igde nxbq zkow lagk"
+$env:OPENAI_API_KEY = ""
+$env:EMAIL_ADDRESS = ""
+$env:EMAIL_PASSWORD = ""
 $env:TO_EMAIL = "1400970255@qq.com"
 $env:OPENAI_BASE_URL = "https://open.bigmodel.cn/api/paas/v4"
 $env:SMTP_SERVER = "smtp.gmail.com"

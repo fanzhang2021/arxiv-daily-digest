@@ -47,6 +47,8 @@ jobs:
           SMTP_SERVER:     ${{ secrets.SMTP_SERVER }}
           SMTP_PORT:       ${{ secrets.SMTP_PORT }}
           FORCE_RUN:       ${{ github.event.inputs.force_run || 'false' }}
+          LLM_INTERVAL_SECONDS: "0"
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
         run: python main.py
 
       - name: 📎 Upload artifact

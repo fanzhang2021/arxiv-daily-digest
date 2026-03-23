@@ -690,7 +690,7 @@ def main():
         logger.info(f"🔗 使用自定义 API: {base_url}")
 
     llm = OpenAI(**client_kw)
-    model = lc.get("model", "gpt-4o-mini")
+    model = os.environ.get("LLM_MODEL", lc.get("model", "gpt-4o-mini"))
     lang = lc.get("language", "中文")
 
     logger.info(f"🤖 模型: {model}, 语言: {lang}")

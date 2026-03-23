@@ -34,7 +34,7 @@ search:
 
 # LLM 配置
 llm:
-  model: "GLM-4.7-Flash"
+  model: "deepseek-chat"
   language: "中文"
   base_url: "https://open.bigmodel.cn/api/paas/v4"
 

@@ -2,12 +2,8 @@ name: 📚 Daily ArXiv Digest
 
 on:
   schedule:
-    # ── 北京时间 周二~周六 凌晨 1:00 运行 ──
-    # 北京 01:00 = UTC 前一天 17:00
-    # UTC 周一~周五 17:00 = 北京 周二~周六 01:00
     - cron: "0 17 * * 1-5"
 
-  # 手动触发（测试用，可以选择强制运行）
   workflow_dispatch:
     inputs:
       force_run:
@@ -39,16 +35,15 @@ jobs:
 
       - name: 🚀 Run digest
         env:
-          OPENAI_API_KEY:  ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
-          EMAIL_ADDRESS:   ${{ secrets.EMAIL_ADDRESS }}
-          EMAIL_PASSWORD:  ${{ secrets.EMAIL_PASSWORD }}
-          TO_EMAIL:        ${{ secrets.TO_EMAIL }}
-          SMTP_SERVER:     ${{ secrets.SMTP_SERVER }}
-          SMTP_PORT:       ${{ secrets.SMTP_PORT }}
-          FORCE_RUN:       ${{ github.event.inputs.force_run || 'false' }}
-          LLM_INTERVAL_SECONDS: "0"
-          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          OPENAI_API_KEY:      ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_BASE_URL:     ${{ secrets.OPENAI_BASE_URL }}
+          EMAIL_ADDRESS:       ${{ secrets.EMAIL_ADDRESS }}
+          EMAIL_PASSWORD:      ${{ secrets.EMAIL_PASSWORD }}
+          TO_EMAIL:            ${{ secrets.TO_EMAIL }}
+          SMTP_SERVER:         ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT:           ${{ secrets.SMTP_PORT }}
+          FORCE_RUN:           ${{ github.event.inputs.force_run || 'false' }}
+          LLM_MODEL:           ${{ secrets.LLM_MODEL }}
           LLM_INTERVAL_SECONDS: ${{ secrets.LLM_INTERVAL_SECONDS }}
         run: python main.py
 

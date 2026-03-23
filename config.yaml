@@ -21,7 +21,7 @@ search:
   # "yesterday" = 只抓昨天的论文（推荐，配合凌晨定时任务）
   # "today"     = 只抓今天的
   # "custom"    = 使用 days_back 自定义范围
-  fetch_mode: "custom"
+  fetch_mode: "yesterday"
 
   # 仅 fetch_mode: "custom" 时生效
   days_back: 3

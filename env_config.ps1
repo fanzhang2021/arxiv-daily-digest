@@ -8,7 +8,7 @@ $env:TO_EMAIL = "1400970255@qq.com"
 $env:OPENAI_BASE_URL = "https://open.bigmodel.cn/api/paas/v4"
 $env:SMTP_SERVER = "smtp.gmail.com"
 $env:SMTP_PORT = "587"
-$env:DAYS_BACK = "3"
+$env:DAYS_BACK = "1"
 
 # 显示配置信息
 Write-Host "环境变量配置完成："

@@ -18,3 +18,5 @@ Write-Host "  TO_EMAIL: $env:TO_EMAIL"
 Write-Host "  OPENAI_BASE_URL: $env:OPENAI_BASE_URL"
 Write-Host "  SMTP_SERVER: $env:SMTP_SERVER"
 Write-Host "  DAYS_BACK: $env:DAYS_BACK"
+
+

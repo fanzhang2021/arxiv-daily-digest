@@ -8,7 +8,7 @@ search:
     - cs.CL
 
   keywords:
-    - "Goedel-Code-Prover"
+    - "code"
 
 # "none" - 只按分类搜索，完全忽略关键字
 # "filter" - 按分类搜索，用关键字本地过滤（推荐，精准）
@@ -37,7 +37,7 @@ search:
 llm:
   model: "deepseek-chat"
   language: "中文"
-  base_url: "https://open.bigmodel.cn/api/paas/v4"
+  base_url: "https://api.deepseek.com/v1"
 
 # 邮件配置
 email:

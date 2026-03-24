@@ -5,7 +5,6 @@
 search:
   categories:
     - cs.SE
-    - cs.CL
 
   keywords:
     - "Goedel-Code-Prover"

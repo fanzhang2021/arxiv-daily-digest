@@ -2,7 +2,9 @@ name: 📚 Daily ArXiv Digest
 
 on:
   schedule:
-    - cron: "0 17 * * 1-5"
+    # 北京时间 周二~周六 上午 10:00
+    # = UTC 周二~周六 02:00
+    - cron: "0 2 * * 2-6"
 
   workflow_dispatch:
     inputs:

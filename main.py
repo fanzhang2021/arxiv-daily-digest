@@ -116,12 +116,16 @@ def should_run_today(config: dict) -> tuple[bool, str]:
 # ══════════════════════════════════════════════════
 def get_target_date_range(config: dict) -> tuple[date, date]:
     """
-    根据 fetch_mode 计算要抓取的日期范围 [start_date, end_date]
+    根据 fetch_mode 计算要抓取的日期范围
 
-    fetch_mode:
-      - "yesterday": 只抓昨天
-      - "today":     只抓今天
-      - "custom":    使用 days_back
+    arXiv 发布规律：
+      - 美东周一~周五 20:00 公布当天论文
+      - 周六周日不公布
+      - 公布后 paper 的 published 时间戳通常是当天（美东）
+
+    本函数的 "yesterday" 模式：
+      - 取前一个 arXiv 工作日的论文
+      - 为安全起见，范围扩大 1 天，避免时区偏移导致遗漏
     """
     sc = config.get("search", {})
     tz = get_search_timezone(config)
@@ -132,7 +136,25 @@ def get_target_date_range(config: dict) -> tuple[date, date]:
 
     if fetch_mode == "yesterday":
         yesterday = today - timedelta(days=1)
-        return yesterday, yesterday
+        weekday = yesterday.weekday()  # 0=周一, 5=周六, 6=周日
+
+        # 回退到最近的 arXiv 工作日
+        if weekday == 5:      # 昨天是周六 → 回退到周五
+            target = yesterday - timedelta(days=1)
+            logger.info(f"📅 昨天是周六({yesterday})，回退到周五({target})")
+        elif weekday == 6:    # 昨天是周日 → 回退到周五
+            target = yesterday - timedelta(days=2)
+            logger.info(f"📅 昨天是周日({yesterday})，回退到周五({target})")
+        else:
+            target = yesterday
+
+        # ★ 范围扩大 1 天，防止时区偏移导致遗漏
+        # 例：arXiv 美东周二 20:00 公布 = 北京周三 08:00
+        #     paper 的 published 可能是 UTC 周三凌晨
+        start = target - timedelta(days=1)
+        end = target + timedelta(days=1)
+        logger.info(f"📅 目标日: {target}，安全范围: {start} ~ {end}")
+        return start, end
 
     elif fetch_mode == "today":
         return today, today
@@ -143,7 +165,7 @@ def get_target_date_range(config: dict) -> tuple[date, date]:
         return start, today
 
     else:
-        logger.warning(f"⚠️ 未知 fetch_mode: {fetch_mode}，默认使用 yesterday")
+        logger.warning(f"⚠️ 未知 fetch_mode: {fetch_mode}")
         yesterday = today - timedelta(days=1)
         return yesterday, yesterday
 

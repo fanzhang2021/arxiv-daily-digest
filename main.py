@@ -113,7 +113,14 @@ def keyword_matches(paper: dict, keywords: list[str]) -> list[str]:
     if not keywords:
         return []
     text = (paper["title"] + " " + paper["abstract"]).lower()
-    return [kw for kw in keywords if kw.lower() in text]
+    matched = []
+    for kw in keywords:
+        # 🌟 使用 \b 实现严格单词级别的匹配
+        # re.escape 确保即使关键字里有特殊符号也能安全处理
+        pattern = rf"\b{re.escape(kw.lower())}\b"
+        if re.search(pattern, text):
+            matched.append(kw)
+    return matched
 
 def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
     sc = config["search"]
@@ -345,11 +352,12 @@ def highlight_keywords(text: str, keywords: list[str]) -> str:
     if not keywords:
         return text
     for kw in keywords:
-        pattern = re.compile(re.escape(kw), re.IGNORECASE)
+        # 🌟 高亮时同样使用严格单词边界，避免高亮了不该高亮的字母
+        pattern = re.compile(rf"\b({re.escape(kw)})\b", re.IGNORECASE)
         text = pattern.sub(
             lambda m: (
                 f'<mark style="background:#fff3cd;padding:1px 3px;'
-                f'border-radius:3px;">{m.group()}</mark>'
+                f'border-radius:3px;">{m.group(1)}</mark>'
             ),
             text,
         )

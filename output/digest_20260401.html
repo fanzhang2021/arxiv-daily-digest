@@ -20,7 +20,7 @@
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
         <h1 style="margin:0;font-size:22px;font-weight:700;letter-spacing:0.5px;">📚 每日 ArXiv 论文精选</h1>
         <p style="margin:8px 0 0;opacity:.9;font-size:13px;">
-            2026年04月01日 周三 Wednesday · 共精选 5 篇论文
+            2026年04月01日 周三 Wednesday · 共精选 8 篇论文
         </p>
         <p style="margin:6px 0 0;font-size:11px;opacity:.7;">🔍 时间窗: 2026-03-28 ~ 至今 | 分类: cs.SE, cs.CL, cs.DC, cs.AI | 过滤: code, program, software, debugging, hpc, parallel, mpi, parallelization, openmp, benchmark</p>
     </div>
@@ -28,8 +28,8 @@
     
 <details open style="margin-bottom:24px;">
     <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
-        🏷️ <span style="margin-left:4px;">计算与语言 (cs.CL)</span> 
-        <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">(1 篇)</span>
+        🏷️ <span style="margin-left:4px;">软件工程 (cs.SE)</span> 
+        <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">(5 篇)</span>
     </summary>
     <div>
 
@@ -40,21 +40,21 @@
             <span style="display:inline-block;background:#ebf4ff;
                          color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
                          line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">1</span>
-            Training-Free Dynamic Upcycling of Expert Language Models
+            Automatic Identification of Parallelizable Loops Using Transformer-Based Source Code Representations
         </div>
 
-        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 专家语言模型的无训练动态升级再造</div>
-        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span></div>
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 基于Transformer源代码表示的并行化循环自动识别</div>
+        
 
         <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
                     border-bottom:1px dashed #edf2f7;">
-            👤 Eros Fanì, Oğuzhan Ersoy &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.LG, cs.CL<br>
-            🔗 <a href="http://arxiv.org/abs/2603.29765v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            👤 Izavan dos S. Correia, Henrique C. T. Santos, Tiago A. E. Ferreira &nbsp;|&nbsp; 📅 2026-04-01 &nbsp;|&nbsp; 🏷️ cs.SE, cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.30040v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
             &nbsp;·&nbsp;
-            📄 <a href="https://arxiv.org/pdf/2603.29765v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+            📄 <a href="https://arxiv.org/pdf/2603.30040v1" style="color:#4299e1;text-decoration:none;">PDF</a>
         </div>
 
-        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对专家模型复用困难与多任务训练冲突的问题，提出了一种无需额外训练即可动态组合多个领域专家模型为统一混合专家模型的方法。</div>
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对传统静态分析难以处理不规则代码以识别可并行循环的问题，提出了一种基于DistilBERT的Transformer方法，通过子词分词捕获代码上下文模式，实现了高精度的并行化潜力分类。</div>
 
         <details style="cursor:pointer;margin-top:6px;">
             <summary style="font-size:13px;font-weight:600;color:#667eea;
@@ -65,7 +65,7 @@
             <div style="font-size:13px;line-height:1.6;color:#4a5568;
                         margin-top:8px;padding:12px;background:#f7fafc;
                         border-radius:6px;border:1px solid #edf2f7;">
-                <p style='margin:3px 0;line-height:1.5;color:#333;'>大型语言模型（LLMs）在广泛的专门任务上取得了显著性能，展现出强大的问题解决能力。然而，训练这些模型的成本极其高昂，并且由于它们依赖于通用知识数据集，常常缺乏特定领域的专业知识。专家微调可以解决这个问题；然而，这常常导致过度专业化，并且由于目标分歧，开发单一的多领域专家模型仍然很困难。此外，由于干扰和灾难性遗忘，多任务训练具有挑战性。现有工作提出在混合专家（MoE）架构内结合稠密模型的专业知识，尽管这种方法仍然需要多任务微调。为了解决这些问题，我们引入了动态升级再造混合专家（DUME），这是一种新颖的方法，它重用在不同领域上训练的稠密专家来构建一个统一的MoE模型。我们的方法构建了一个单一的多任务模型，该模型保留了原始稠密专家的能力，而无需额外的训练。DUME既具有成本效益又可扩展：通过利用岭回归的闭式解，它消除了进一步优化的需要，并允许动态添加专家，同时保持模型的原始性能。我们证明，在因果语言建模和推理设置中，DUME始终优于基线方法。最后，我们还展示了DUME模型可以进行微调以进一步提高性能。我们表明，在因果语言建模设置中，DUME可以保留专门用于某一特定领域的稠密专家模型高达97.6%的性能，并且在推理设置中，它甚至可以超越该专家模型，达到稠密专家性能的102.1%。我们的代码可在以下网址获取：github.com/gensyn-ai/dume。</p>
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>在软件工程中，自动并行化仍然是一个具有挑战性的问题，特别是在识别代码区域中哪些循环可以在现代多核架构上安全地并行执行。传统的静态分析技术，如依赖分析和多面体模型，常常难以处理不规则或动态结构的代码。在这项工作中，我们提出了一种基于Transformer的方法来对源代码的并行化潜力进行分类，重点是区分独立（可并行化）循环与未定义的循环。我们采用DistilBERT，利用子词分词处理源代码序列，使模型能够捕获上下文句法和语义模式，而无需手工制作特征。该方法在一个结合了合成生成循环和人工标注真实世界代码的平衡数据集上进行了评估，使用了10折交叉验证和多种性能指标。结果显示出一致的高性能，平均准确率超过99%，且误报率低，证明了其鲁棒性和可靠性。与先前基于标记的方法相比，所提出的方法简化了预处理，同时提高了泛化能力并保持了计算效率。这些发现凸显了轻量级Transformer模型在循环级别实际识别并行化机会方面的潜力。</p>
             </div>
         </details>
 
@@ -79,10 +79,218 @@
                         padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
                         font-family:Consolas,'Microsoft YaHei',monospace;
                         white-space:pre-wrap;word-wrap:break-word;
-                        color:#4a5568;user-select:all;cursor:text;">Training-Free Dynamic Upcycling of Expert Language Models
-📌 专家语言模型的无训练动态升级再造
-💡 本文针对专家模型复用困难与多任务训练冲突的问题，提出了一种无需额外训练即可动态组合多个领域专家模型为统一混合专家模型的方法。
-🔗 http://arxiv.org/abs/2603.29765v1</pre>
+                        color:#4a5568;user-select:all;cursor:text;">Automatic Identification of Parallelizable Loops Using Transformer-Based Source Code Representations
+📌 基于Transformer源代码表示的并行化循环自动识别
+💡 本文针对传统静态分析难以处理不规则代码以识别可并行循环的问题，提出了一种基于DistilBERT的Transformer方法，通过子词分词捕获代码上下文模式，实现了高精度的并行化潜力分类。
+🔗 http://arxiv.org/abs/2603.30040v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">2</span>
+            Phyelds: A Pythonic Framework for Aggregate Computing
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 Phyelds：一个用于聚合计算的 Pythonic 框架</div>
+        
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Gianluca Aguzzi, Davide Domini, Nicolas Farabegoli 等4人 &nbsp;|&nbsp; 📅 2026-04-01 &nbsp;|&nbsp; 🏷️ cs.SE, cs.AI, cs.PL<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29999v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29999v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对聚合计算缺乏面向主流Python数据科学实践者的实现问题，提出了一个轻量级、功能齐全且易于与Python机器学习生态集成的Python库Phyelds。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>聚合编程是一种基于场的协调范式，经过十多年的探索，已在传感器网络、机器人和物联网等多个领域成功应用，并拥有多种编程语言的实现，例如 Protelis、ScaFi (Scala) 和 FCPP (C++)。一个近期的研究方向将机器学习与聚合计算相结合，旨在支持大规模分布式学习，并为实现学习算法提供新的抽象。然而，现有的实现并未以数据科学实践者为目标，而他们主要使用Python——数据科学和机器学习的事实标准语言，拥有丰富且成熟的生态系统。Python在其他用例中也具有优势，例如教育和机器人学（例如通过ROS）。为了弥补这一空白，我们提出了Phyelds，一个用于聚合编程的Python库。Phyelds提供了功能齐全且轻量级的场演算计算模型实现，其特点是具有Pythonic的API和专为与Python机器学习生态系统无缝集成而设计的架构。我们描述了Phyelds的设计与实现，并通过从众所周知的聚合计算模式到联邦学习协调，以及与一个广泛使用的多智能体强化学习模拟器的集成，展示了其在多个领域的多功能性。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">Phyelds: A Pythonic Framework for Aggregate Computing
+📌 Phyelds：一个用于聚合计算的 Pythonic 框架
+💡 本文针对聚合计算缺乏面向主流Python数据科学实践者的实现问题，提出了一个轻量级、功能齐全且易于与Python机器学习生态集成的Python库Phyelds。
+🔗 http://arxiv.org/abs/2603.29999v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">3</span>
+            Think Anywhere in Code Generation
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 代码生成中的随处思考</div>
+        
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Xue Jiang, Tianyu Zhang, Ge Li 等11人 &nbsp;|&nbsp; 📅 2026-04-01 &nbsp;|&nbsp; 🏷️ cs.SE, cs.LG<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29957v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29957v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对代码生成中前置思考的局限性，提出了一种让大语言模型能在生成代码的任何位置按需调用推理的新机制。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>推理大语言模型（LLMs）的最新进展主要依赖于前置思考，即推理发生在最终答案之前。然而，这种方法在代码生成中存在关键局限性，因为问题的全部复杂性往往在代码实现过程中才显现出来，前置思考通常是不够的。此外，它无法在难度差异显著的代码生成过程中自适应地分配推理精力。在本文中，我们提出了Think-Anywhere，一种新颖的推理机制，使LLMs能够在代码生成过程中的任何令牌位置按需调用思考。我们通过首先教导LLMs通过冷启动训练来模仿推理模式，然后利用基于结果的强化学习奖励来驱动模型自主探索何时何地调用推理，从而实现了Think-Anywhere。在四个主流代码生成基准（即LeetCode、LiveCodeBench、HumanEval和MBPP）上进行的大量实验表明，Think-Anywhere在现有推理方法和最近的训练后方法上都达到了最先进的性能，同时在不同LLMs上展示了一致的泛化能力。我们的分析进一步揭示，Think-Anywhere使模型能够自适应地在高熵位置调用推理，提供了更强的可解释性。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">Think Anywhere in Code Generation
+📌 代码生成中的随处思考
+💡 本文针对代码生成中前置思考的局限性，提出了一种让大语言模型能在生成代码的任何位置按需调用推理的新机制。
+🔗 http://arxiv.org/abs/2603.29957v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">4</span>
+            BayesInsights: Modelling Software Delivery and Developer Experience with Bayesian Networks at Bloomberg
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 BayesInsights：在彭博社使用贝叶斯网络对软件交付与开发者体验进行建模</div>
+        
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Serkan Kirbas, Federica Sarro, David Williams &nbsp;|&nbsp; 📅 2026-04-01 &nbsp;|&nbsp; 🏷️ cs.SE<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29929v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29929v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对软件工程数据难以揭示因果关系的问题，提出了一种基于贝叶斯网络的可视化交互工具BayesInsights，以帮助识别交付挑战。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>随着工业软件规模和复杂性的增长，公司生成和使用的工程数据量也随之增加。理想情况下，这些数据可用于多种目的，包括为工程优先级决策提供信息。然而，如果没有对软件开发不同方面之间联系的结构化表示，公司可能难以识别缺陷的根本原因或预测变更的影响。在本文中，我们报告了在彭博社开发一款名为BayesInsights的新工具的经验，该工具提供了一个交互式界面，用于使用贝叶斯网络可视化软件工程过程中各个方面的因果依赖关系。我们描述了从结合现有文献、专家见解和结构学习算法来定义网络结构，到将BayesInsights集成到现有数据分析解决方案中的历程，并以对性能基准测试和来自彭博社24位资深从业者的调查反馈进行的混合方法评估作为总结。我们的结果显示，95.8%的参与者认为该工具对于识别团队和组织层面的软件交付挑战很有用，这巩固了其作为软件交付和开发者体验建模概念验证的价值。BayesInsights目前处于预览阶段，已授权七个工程团队访问，并为未来制定了更广泛的部署路线图。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">BayesInsights: Modelling Software Delivery and Developer Experience with Bayesian Networks at Bloomberg
+📌 BayesInsights：在彭博社使用贝叶斯网络对软件交付与开发者体验进行建模
+💡 本文针对软件工程数据难以揭示因果关系的问题，提出了一种基于贝叶斯网络的可视化交互工具BayesInsights，以帮助识别交付挑战。
+🔗 http://arxiv.org/abs/2603.29929v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">5</span>
+            SkillReducer: Optimizing LLM Agent Skills for Token Efficiency
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 SkillReducer：优化LLM智能体技能以实现令牌效率</div>
+        
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Yudong Gao, Zongjie Li, Yuanyuanyuan 等6人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.SE<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29919v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29919v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对LLM代码智能体技能描述冗长、内容低效导致令牌成本高和注意力分散的问题，提出了一个两阶段优化框架SkillReducer来压缩和重构技能内容。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>基于LLM的编码智能体依赖于*技能*——这些预先打包的指令集扩展了智能体的能力，然而注入到上下文窗口中的每一个技能内容令牌都会产生货币成本并导致注意力稀释。为了理解这个问题的严重性，我们对55,315个公开可用的技能进行了大规模实证研究，发现了系统性的低效问题：26.4%的技能完全缺乏路由描述，超过60%的主体内容是不可操作的，并且每次调用时参考文件可能注入数万个令牌。基于这些发现，我们提出了SkillReducer，一个两阶段优化框架。阶段1通过压缩冗长的描述和通过对抗性增量调试生成缺失的描述来优化路由层。阶段2通过分类学驱动的分类和渐进式披露来重构技能主体，将可操作的核心规则与按需加载的补充内容分离开来，并通过忠实度检查和自校正反馈循环进行验证。在600个技能和SkillsBench基准测试上进行评估，SkillReducer实现了48%的描述压缩和39%的主体压缩，同时将功能质量提高了2.8%，揭示了一种*少即是多*的效应，即移除非必要内容减少了上下文窗口中的注意力分散。这些益处跨四个系列的五个模型得以转移，平均保留率为0.965，并且可以推广到一个独立的智能体框架。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">SkillReducer: Optimizing LLM Agent Skills for Token Efficiency
+📌 SkillReducer：优化LLM智能体技能以实现令牌效率
+💡 本文针对LLM代码智能体技能描述冗长、内容低效导致令牌成本高和注意力分散的问题，提出了一个两阶段优化框架SkillReducer来压缩和重构技能内容。
+🔗 http://arxiv.org/abs/2603.29919v1</pre>
         </details>
     </div>
     </div>
@@ -91,68 +299,6 @@
 <details open style="margin-bottom:24px;">
     <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
         🏷️ <span style="margin-left:4px;">分布式与并行计算 (cs.DC)</span> 
-        <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">(1 篇)</span>
-    </summary>
-    <div>
-
-    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
-                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
-
-        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
-            <span style="display:inline-block;background:#ebf4ff;
-                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
-                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">2</span>
-            M3SA: Exploring Datacenter Performance and Climate-Impact with Multi- and Meta-Model Simulation and Analysis
-        </div>
-
-        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 M3SA：利用多模型与元模型仿真分析探索数据中心性能与气候影响</div>
-        
-
-        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
-                    border-bottom:1px dashed #edf2f7;">
-            👤 Radu Nicolae, Dante Niewenhuis, Sacheendra Talluri 等4人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.DC<br>
-            🔗 <a href="http://arxiv.org/abs/2603.29778v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
-            &nbsp;·&nbsp;
-            📄 <a href="https://arxiv.org/pdf/2603.29778v1" style="color:#4299e1;text-decoration:none;">PDF</a>
-        </div>
-
-        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对数据中心单一模型仿真存在的局限，提出了一个结合多模型与元模型的仿真分析框架M3SA，以更全面地评估其性能与气候影响。</div>
-
-        <details style="cursor:pointer;margin-top:6px;">
-            <summary style="font-size:13px;font-weight:600;color:#667eea;
-                            padding:4px 0;user-select:none;outline:none;
-                            list-style:none;">
-                <span>📋 展开中文摘要</span>
-            </summary>
-            <div style="font-size:13px;line-height:1.6;color:#4a5568;
-                        margin-top:8px;padding:12px;background:#f7fafc;
-                        border-radius:6px;border:1px solid #edf2f7;">
-                <p style='margin:3px 0;line-height:1.5;color:#333;'>数据中心对我们的数字社会至关重要，但其消耗了全球相当大一部分的电力，且需求预计将持续增长。为了提高其可持续性和性能，我们预见仿真器将成为主要的决策工具。然而，与关注水务和公共交通等其他关键社会基础设施的领域不同，数据中心仿真器尚未将多个独立模型整合到其运行中，因此存在与单一模型相关的问题，例如专业化，以及对运行现象缺乏适应性。为了应对这一挑战，我们提出了M3SA，这是一个数据中心仿真与分析框架，它使用离散事件仿真来预测每个模型在各种现实数据中心条件下对气候和性能的影响，然后综合这些预测结果。我们设计了一个用于仿真多个并发模型的架构（多模型），一种将多个模型结果整合为元模型的技术，以及一个量化元模型准确性的流程。通过对M3SA原型的实验，我们表明：（i）M3SA能够复现并增强经过同行评审的实验；（ii）M3SA能够预测运行根本不同工作负载轨迹的数据中心的运行现象（例如，故障）；（iii）M3SA支持各种类型的假设分析和方案分析，例如如何根据年度能源生产模式配置具有二氧化碳感知的迁移策略。M3SA已集成到开源仿真器OpenDC中，可通过以下网址获取：https://github.com/atlarge-research/opendc-m3sa。</p>
-            </div>
-        </details>
-
-        <details style="cursor:pointer;margin-top:2px;">
-            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
-                            padding:4px 0;user-select:none;outline:none;
-                            list-style:none;">
-                <span>📎 复制卡片文本</span>
-            </summary>
-            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
-                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
-                        font-family:Consolas,'Microsoft YaHei',monospace;
-                        white-space:pre-wrap;word-wrap:break-word;
-                        color:#4a5568;user-select:all;cursor:text;">M3SA: Exploring Datacenter Performance and Climate-Impact with Multi- and Meta-Model Simulation and Analysis
-📌 M3SA：利用多模型与元模型仿真分析探索数据中心性能与气候影响
-💡 本文针对数据中心单一模型仿真存在的局限，提出了一个结合多模型与元模型的仿真分析框架M3SA，以更全面地评估其性能与气候影响。
-🔗 http://arxiv.org/abs/2603.29778v1</pre>
-        </details>
-    </div>
-    </div>
-</details>
-
-<details open style="margin-bottom:24px;">
-    <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
-        🏷️ <span style="margin-left:4px;">人工智能 (cs.AI)</span> 
         <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">(3 篇)</span>
     </summary>
     <div>
@@ -163,22 +309,22 @@
         <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
             <span style="display:inline-block;background:#ebf4ff;
                          color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
-                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">3</span>
-            Tracking vs. Deciding: The Dual-Capability Bottleneck in Searchless Chess Transformers
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">6</span>
+            A Lightweight Hybrid Publish/Subscribe Event Fabric for IPC and Modular Distributed Systems
         </div>
 
-        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 追踪与决策：无搜索象棋Transformer中的双重能力瓶颈</div>
-        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span></div>
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 一种用于IPC与模块化分布式系统的轻量级混合发布/订阅事件结构</div>
+        
 
         <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
                     border-bottom:1px dashed #edf2f7;">
-            👤 Quanhao Li, Wei Jiang &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI<br>
-            🔗 <a href="http://arxiv.org/abs/2603.29761v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            👤 Dimitris Gkoulis &nbsp;|&nbsp; 📅 2026-04-01 &nbsp;|&nbsp; 🏷️ cs.DC, cs.SE<br>
+            🔗 <a href="http://arxiv.org/abs/2603.30030v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
             &nbsp;·&nbsp;
-            📄 <a href="https://arxiv.org/pdf/2603.29761v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+            📄 <a href="https://arxiv.org/pdf/2603.30030v1" style="color:#4299e1;text-decoration:none;">PDF</a>
         </div>
 
-        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对仅从棋步序列训练的象棋AI模型，揭示了其状态追踪与决策质量间的矛盾，并通过模型缩放和Elo加权训练来协同提升这两项能力。</div>
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对模块化分布式系统中进程内协调与跨节点消息传递的复杂性问题，提出了一种名为CNS的轻量级本地优先混合事件结构。</div>
 
         <details style="cursor:pointer;margin-top:6px;">
             <summary style="font-size:13px;font-weight:600;color:#667eea;
@@ -189,7 +335,7 @@
             <div style="font-size:13px;line-height:1.6;color:#4a5568;
                         margin-top:8px;padding:12px;background:#f7fafc;
                         border-radius:6px;border:1px solid #edf2f7;">
-                <p style='margin:3px 0;line-height:1.5;color:#333;'>一个类人的象棋引擎应该模仿高水平人类棋手的风格、错误和一致性，而不是最大化棋力。我们证明，仅从棋步序列进行训练会迫使模型学习两种能力：状态追踪（从棋步历史重建棋盘）和决策质量（从重建的状态中选择好的棋步）。这两者施加了矛盾的数据要求：低等级对局提供了追踪所需的多样性，而高等级对局则为决策学习提供了质量信号。移除低等级数据会降低性能。我们将这种张力形式化为一个双重能力瓶颈，P <= min(T,Q)，即整体性能受限于较弱的能力。基于这一观点，我们将模型参数从2800万扩展到1.2亿以改进追踪能力，然后引入Elo加权训练以在保持多样性的同时改进决策。一个2 x 2因子消融实验表明，缩放改进了追踪，加权改进了决策，并且它们的组合具有超加性效应。线性加权效果最佳，而过于激进的加权尽管降低了验证损失，却损害了追踪能力。我们还引入了一个覆盖衰减公式，t* = log(N/kcrit)/log b，作为对局内退化风险的可靠性界限。我们最终的1.2亿参数模型，无需搜索，在253场评级对局中达到了Lichess快棋等级分2570。在人类棋步预测任务上，它实现了55.2%的Top-1准确率，超过了Maia-2慢棋和Maia-2快棋模型。与基于棋局位置的方法不同，序列输入自然地编码了完整的对局历史，使得模型能够做出依赖于历史的决策，这是单棋局位置模型无法展现的。</p>
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>部署在受控分布式环境中微型计算单元上的模块化软件通常需要两种消息传递路径：低开销的进程内协调和选择性的跨节点分发。在实践中，事件标识、序列化和传输桥接经常被实现为临时性的粘合代码，这使得进程间通信（IPC）、结构化路由和关闭行为变得复杂。本文提出了CNS，一种以异步“发射后不管”消息传递为中心的轻量级本地优先混合事件结构。CNS结合了类型化事件键、按族序列化和验证、用于进程内协调的本地发布/订阅上下文，以及一个由NATS支持的用于节点间分发的分布式上下文。一个桥接运行时在两个上下文之间移动事件，同时保留一个共同的路由词汇表。主要的操作模式是“发射后不管”的发布和订阅；在同一主题空间上，双向请求-回复仍可作为次要扩展使用。本文报告了一个Python原型和单机测量结果。纯本地传递平均耗时约30微秒。纯分布式传递平均耗时1.26-1.37毫秒，混合桥接平均耗时1.64-1.89毫秒。相对于序列化选择，验证引入了适度的开销。最终构建的产物适用于结构化IPC，以及模块化服务内部和受控节点有限集合之间的实际消息移动。</p>
             </div>
         </details>
 
@@ -203,10 +349,10 @@
                         padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
                         font-family:Consolas,'Microsoft YaHei',monospace;
                         white-space:pre-wrap;word-wrap:break-word;
-                        color:#4a5568;user-select:all;cursor:text;">Tracking vs. Deciding: The Dual-Capability Bottleneck in Searchless Chess Transformers
-📌 追踪与决策：无搜索象棋Transformer中的双重能力瓶颈
-💡 本文针对仅从棋步序列训练的象棋AI模型，揭示了其状态追踪与决策质量间的矛盾，并通过模型缩放和Elo加权训练来协同提升这两项能力。
-🔗 http://arxiv.org/abs/2603.29761v1</pre>
+                        color:#4a5568;user-select:all;cursor:text;">A Lightweight Hybrid Publish/Subscribe Event Fabric for IPC and Modular Distributed Systems
+📌 一种用于IPC与模块化分布式系统的轻量级混合发布/订阅事件结构
+💡 本文针对模块化分布式系统中进程内协调与跨节点消息传递的复杂性问题，提出了一种名为CNS的轻量级本地优先混合事件结构。
+🔗 http://arxiv.org/abs/2603.30030v1</pre>
         </details>
     </div>
     <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
@@ -215,22 +361,22 @@
         <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
             <span style="display:inline-block;background:#ebf4ff;
                          color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
-                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">4</span>
-            TSHA: A <mark style="background:#fff3cd;padding:1px 3px;border-radius:3px;">Benchmark</mark> for Visual Language Models in Trustworthy Safety Hazard Assessment Scenarios
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">7</span>
+            Scalable AI-assisted Workflow Management for Detector Design Optimization Using Distributed Computing
         </div>
 
-        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 TSHA：一个用于评估视觉语言模型在可信安全风险场景中性能的基准</div>
-        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 software</span> <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 benchmark</span></div>
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 利用分布式计算进行探测器设计优化的可扩展AI辅助工作流管理</div>
+        
 
         <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
                     border-bottom:1px dashed #edf2f7;">
-            👤 Qiucheng Yu, Ruijie Xu, Mingang Chen 等7人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.CV, cs.AI<br>
-            🔗 <a href="http://arxiv.org/abs/2603.29759v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            👤 Derek Anderson, Amit Bashyal, Markus Diefenthaler 等16人 &nbsp;|&nbsp; 📅 2026-04-01 &nbsp;|&nbsp; 🏷️ cs.DC, cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.30014v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
             &nbsp;·&nbsp;
-            📄 <a href="https://arxiv.org/pdf/2603.29759v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+            📄 <a href="https://arxiv.org/pdf/2603.30014v1" style="color:#4299e1;text-decoration:none;">PDF</a>
         </div>
 
-        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对现有室内安全风险评估基准存在的三大局限，提出了一个包含多源真实数据、复杂测试场景的综合性新基准TSHA。</div>
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对现代探测器设计中高维参数空间探索的挑战，提出了一种集成多目标贝叶斯优化与PanDA-iDDS工作流引擎的AI辅助框架。</div>
 
         <details style="cursor:pointer;margin-top:6px;">
             <summary style="font-size:13px;font-weight:600;color:#667eea;
@@ -241,7 +387,7 @@
             <div style="font-size:13px;line-height:1.6;color:#4a5568;
                         margin-top:8px;padding:12px;background:#f7fafc;
                         border-radius:6px;border:1px solid #edf2f7;">
-                <p style='margin:3px 0;line-height:1.5;color:#333;'>视觉语言模型（VLMs）的最新进展加速了其在室内安全风险评估中的应用。然而，现有基准存在三个根本性局限：（1）严重依赖通过仿真软件构建的合成数据集，与现实环境存在显著的领域差距；（2）安全任务过于简化，对危险和场景类型施加了人为限制，从而限制了模型的泛化能力；（3）缺乏严格的评估协议来全面评估模型在复杂家庭安全场景中的能力。为了应对这些挑战，我们引入了TSHA（可信安全风险评估），这是一个全面的基准，包含来自四个互补来源的81,809个精心策划的训练样本：现有室内数据集、互联网图像、AIGC图像和新捕获的图像。该基准集还包括一个极具挑战性的测试集，包含1707个样本，不仅包含从训练分布中精心挑选的子集，还新增了包含多种安全隐患的视频和全景图像，用于评估模型在复杂安全场景中的鲁棒性。对23个流行VLM的广泛实验表明，当前的VLM缺乏强大的安全风险评估能力。重要的是，在TSHA训练集上训练的模型不仅在TSHA测试集上实现了高达+18.3分的显著性能提升，而且在其他基准上也表现出增强的泛化能力，这突显了TSHA基准的重大贡献和重要性。</p>
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>最初为欧洲核子研究中心大型强子对撞机（LHC）的ATLAS实验而开发的生产与分布式分析（PanDA）系统，已发展成为一个强大的平台，用于协调跨分布式计算资源的大规模工作流。结合其智能分布式调度与调度（iDDS）组件，PanDA通过一个可扩展且灵活的工作流引擎支持AI/ML驱动的工作流。我们提出了一种用于探测器设计优化的AI辅助框架，该框架将多目标贝叶斯优化与PanDA-iDDS工作流引擎集成，以协调跨异构资源的迭代模拟。该框架解决了现代探测器设计中固有的探索高维参数空间的挑战。我们使用基准问题以及对电子-离子对撞机（EIC）的ePIC和dRICH探测器的实际研究来演示该框架。结果显示，在多目标优化方面，自动化程度、可扩展性和效率均得到提升。这项工作为AI驱动的探测器设计及其他计算密集型科学应用建立了一个灵活且可扩展的范式。</p>
             </div>
         </details>
 
@@ -255,10 +401,10 @@
                         padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
                         font-family:Consolas,'Microsoft YaHei',monospace;
                         white-space:pre-wrap;word-wrap:break-word;
-                        color:#4a5568;user-select:all;cursor:text;">TSHA: A Benchmark for Visual Language Models in Trustworthy Safety Hazard Assessment Scenarios
-📌 TSHA：一个用于评估视觉语言模型在可信安全风险场景中性能的基准
-💡 本文针对现有室内安全风险评估基准存在的三大局限，提出了一个包含多源真实数据、复杂测试场景的综合性新基准TSHA。
-🔗 http://arxiv.org/abs/2603.29759v1</pre>
+                        color:#4a5568;user-select:all;cursor:text;">Scalable AI-assisted Workflow Management for Detector Design Optimization Using Distributed Computing
+📌 利用分布式计算进行探测器设计优化的可扩展AI辅助工作流管理
+💡 本文针对现代探测器设计中高维参数空间探索的挑战，提出了一种集成多目标贝叶斯优化与PanDA-iDDS工作流引擎的AI辅助框架。
+🔗 http://arxiv.org/abs/2603.30014v1</pre>
         </details>
     </div>
     <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
@@ -267,22 +413,22 @@
         <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
             <span style="display:inline-block;background:#ebf4ff;
                          color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
-                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">5</span>
-            Reinforced Reasoning for End-to-End Retrosynthetic Planning
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">8</span>
+            A Precision Emulation Approach to the GPU Acceleration of Ab Initio Electronic Structure Calculations
         </div>
 
-        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 基于强化推理的端到端逆合成规划</div>
-        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 mpi</span></div>
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 一种用于从头算电子结构计算GPU加速的精确仿真方法</div>
+        
 
         <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
                     border-bottom:1px dashed #edf2f7;">
-            👤 Chenyang Zuo, Siqi Fan, Yizhen Luo 等4人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI<br>
-            🔗 <a href="http://arxiv.org/abs/2603.29723v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            👤 Hang Liu, Junjie Li, Yinzhi Wang 等5人 &nbsp;|&nbsp; 📅 2026-04-01 &nbsp;|&nbsp; 🏷️ cs.DC, cs.PF, physics.comp-ph<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29975v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
             &nbsp;·&nbsp;
-            📄 <a href="https://arxiv.org/pdf/2603.29723v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+            📄 <a href="https://arxiv.org/pdf/2603.29975v1" style="color:#4299e1;text-decoration:none;">PDF</a>
         </div>
 
-        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对逆合成规划的组合复杂性挑战，提出了ReTriP端到端生成框架，通过路径连贯的分子表示和渐进式训练，将逆合成重构为直接的思维链推理任务。</div>
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对传统FP64高性能计算负载在现代GPU上加速的问题，提出了一种基于INT8仿真且无需修改代码的可调精度仿真方法。</div>
 
         <details style="cursor:pointer;margin-top:6px;">
             <summary style="font-size:13px;font-weight:600;color:#667eea;
@@ -293,7 +439,7 @@
             <div style="font-size:13px;line-height:1.6;color:#4a5568;
                         margin-top:8px;padding:12px;background:#f7fafc;
                         border-radius:6px;border:1px solid #edf2f7;">
-                <p style='margin:3px 0;line-height:1.5;color:#333;'>逆合成规划是有机化学中的一项基本任务，但由于其组合复杂性，仍然具有挑战性。为了解决这个问题，传统方法通常依赖于将单步预测与外部搜索启发式方法相结合的混合框架，这不可避免地破坏了局部分子转化与全局规划目标之间的逻辑连贯性。为了弥合这一差距，并将复杂的战略前瞻性直接嵌入到模型的化学推理中，我们引入了ReTriP，这是一个端到端的生成框架，它将逆合成重新表述为一个直接的思维链推理任务。我们建立了一种路径连贯的分子表示，并采用了一种渐进式训练课程，从推理蒸馏过渡到带有可验证奖励的强化学习，从而有效地将逐步生成与实际路线效用对齐。在RetroBench上的实证评估表明，ReTriP实现了最先进的性能，与混合基线相比，在长程规划中表现出卓越的鲁棒性。</p>
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>本研究探索了在现代GPU架构上使用基于INT8的仿真来加速传统的基于FP64的高性能计算负载。通过用于缓存一致性统一内存架构的SCILIB-Accel自动BLAS卸载工具，我们在MuST套件中的LSMS CPU应用程序中仿真了FP64矩阵乘法，而无需更改代码。我们发现，精度既取决于算术精度，也取决于算子的特性，这可以通过可调精度仿真来处理。与传统的混合精度方法不同，此方法在优化硬件利用率的同时保留了原始算法。我们展示了同时提高精度和性能的潜力。这项工作凸显了人工智能驱动硬件改变高性能计算的潜力，并倡导在未来科学计算中采用自适应精度策略。</p>
             </div>
         </details>
 
@@ -307,10 +453,10 @@
                         padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
                         font-family:Consolas,'Microsoft YaHei',monospace;
                         white-space:pre-wrap;word-wrap:break-word;
-                        color:#4a5568;user-select:all;cursor:text;">Reinforced Reasoning for End-to-End Retrosynthetic Planning
-📌 基于强化推理的端到端逆合成规划
-💡 本文针对逆合成规划的组合复杂性挑战，提出了ReTriP端到端生成框架，通过路径连贯的分子表示和渐进式训练，将逆合成重构为直接的思维链推理任务。
-🔗 http://arxiv.org/abs/2603.29723v1</pre>
+                        color:#4a5568;user-select:all;cursor:text;">A Precision Emulation Approach to the GPU Acceleration of Ab Initio Electronic Structure Calculations
+📌 一种用于从头算电子结构计算GPU加速的精确仿真方法
+💡 本文针对传统FP64高性能计算负载在现代GPU上加速的问题，提出了一种基于INT8仿真且无需修改代码的可调精度仿真方法。
+🔗 http://arxiv.org/abs/2603.29975v1</pre>
         </details>
     </div>
     </div>

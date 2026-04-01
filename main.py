@@ -1,7 +1,19 @@
 #!/usr/bin/env python3
 """
-ArXiv Daily Paper Digest (稳健版：时间窗 + ID去重)
-抓取 arXiv 论文 → ID去重 → 关键词过滤 → LLM 翻译总结 → 邮件推送 → 记录成功ID
+ArXiv Daily Paper Digest
+稳健版：时间窗 + ID去重 + LLM学科过滤 + 分流式seen记录
+
+流程：
+抓取 arXiv 论文
+→ ID去重
+→ 时间窗过滤
+→ 关键词过滤
+→ LLM学科判定
+   - 不属于目标学科：立即记录 seen
+   - 属于目标学科：LLM总结
+→ 邮件推送
+   - 邮件成功：记录已发送论文 seen
+   - 邮件失败：不记录已发送论文 seen（下次可重试）
 """
 
 import os
@@ -43,7 +55,7 @@ SEEN_FILE = "seen_papers.txt"
 #  1. 状态管理 (已抓取 ID 去重)
 # ══════════════════════════════════════════════════
 def load_seen_papers() -> set:
-    """加载已经发送过的论文 ID（剥离版本号）"""
+    """加载已经处理过的论文 ID（剥离版本号）"""
     if not os.path.exists(SEEN_FILE):
         return set()
     with open(SEEN_FILE, "r", encoding="utf-8") as f:
@@ -53,13 +65,14 @@ def save_seen_papers(new_ids: list):
     """追加保存新的论文 ID"""
     if not new_ids:
         return
+    unique_ids = list(dict.fromkeys(new_ids))
     with open(SEEN_FILE, "a", encoding="utf-8") as f:
-        for pid in new_ids:
+        for pid in unique_ids:
             f.write(f"{pid}\n")
-    logger.info(f"💾 已将 {len(new_ids)} 个新论文 ID 永久保存至 {SEEN_FILE}")
+    logger.info(f"💾 已写入 {len(unique_ids)} 个论文 ID 到 {SEEN_FILE}")
 
 def get_base_id(entry_id: str) -> str:
-    """从URL中提取纯ID，去掉版本号，如 http://arxiv.org/abs/2101.12345v1 -> 2101.12345"""
+    """从URL中提取纯ID，去掉版本号"""
     match = re.search(r"abs/(\d+\.\d+)(v\d+)?", entry_id)
     if match:
         return match.group(1)
@@ -88,6 +101,9 @@ def get_search_timezone(config: dict):
         logger.warning(f"⚠️ 无法识别时区 {tz_name}，回退到 UTC")
         return timezone.utc
 
+def paper_in_target_categories(paper: dict, target_categories: list[str]) -> bool:
+    return any(cat in target_categories for cat in paper.get("categories", []))
+
 
 # ══════════════════════════════════════════════════
 #  3. 抓取 arXiv 论文 (漏斗过滤机制)
@@ -115,37 +131,33 @@ def keyword_matches(paper: dict, keywords: list[str]) -> list[str]:
     text = (paper["title"] + " " + paper["abstract"]).lower()
     matched = []
     for kw in keywords:
-        # 🌟 使用 \b 实现严格单词级别的匹配
-        # re.escape 确保即使关键字里有特殊符号也能安全处理
         pattern = rf"\b{re.escape(kw.lower())}\b"
         if re.search(pattern, text):
             matched.append(kw)
     return matched
 
-def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
+def fetch_papers(config: dict) -> tuple[list[dict], date, date]:
     sc = config["search"]
 
     keywords = normalize_list(sc.get("keywords", []))
     categories = normalize_list(sc.get("categories", []))
     max_papers = int(sc.get("max_papers", 10))
     keyword_mode = sc.get("keyword_mode", "none")
-    days_back = int(sc.get("days_back", 4))  # 回溯天数
+    days_back = int(sc.get("days_back", 4))
     tz = get_search_timezone(config)
 
     now = datetime.now(tz)
     today_date = now.date()
     cutoff_date = today_date - timedelta(days=days_back)
-    
-    seen_ids = load_seen_papers()
 
+    seen_ids = load_seen_papers()
     query = build_query(keywords, categories, keyword_mode)
 
     logger.info(f"🔍 arXiv query: {query}")
     logger.info(f"📅 目标时间窗 ({tz}): {cutoff_date} ~ 至今")
     logger.info(f"🔧 关键字模式: {keyword_mode}")
-    logger.info(f"📌 最大论文数: {max_papers}")
+    logger.info(f"📌 最大候选论文数: {max_papers}")
 
-    # 为了确保在 days_back 窗口期内能扫到足够的论文，拉大单次检索上限
     fetch_limit = max(1000, max_papers * 50)
     logger.info(f"📥 API 最大抓取上限: {fetch_limit}")
 
@@ -159,7 +171,6 @@ def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
     client = arxiv.Client(page_size=100, delay_seconds=3.0, num_retries=3)
 
     papers = []
-    new_scanned_ids = []
 
     skipped_by_date = 0
     skipped_by_keyword = 0
@@ -170,7 +181,6 @@ def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
         total_scanned += 1
         base_id = get_base_id(result.entry_id)
 
-        # ── 漏斗第一关：历史去重 ──
         if base_id in seen_ids:
             skipped_by_seen += 1
             continue
@@ -182,7 +192,6 @@ def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
         pub_local = pub.astimezone(tz)
         pub_date = pub_local.date()
 
-        # ── 漏斗第二关：时间窗过滤 ──
         if pub_date < cutoff_date:
             skipped_by_date += 1
             continue
@@ -203,11 +212,10 @@ def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
             "matched_keywords": [],
         }
 
-        # ── 漏斗第三关：分类豁免与关键词过滤 ──
         if keyword_mode == "filter" and keywords:
-            exempt_cats = sc.get("filter_exempt_categories", [])
+            exempt_cats = normalize_list(sc.get("filter_exempt_categories", []))
             is_exempt = any(cat in exempt_cats for cat in paper["categories"])
-            
+
             if is_exempt:
                 logger.info(f"  🔓 豁免分类放行: {paper['categories']} -> {paper['title'][:40]}")
                 paper["matched_keywords"] = []
@@ -218,13 +226,11 @@ def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
                     continue
                 paper["matched_keywords"] = matched
 
-        # 🎉 完美命中，收录！
         papers.append(paper)
-        new_scanned_ids.append(base_id)
-        logger.info(f"  ✅ 命中新论文: {paper['published']} | {paper['title'][:60]}")
+        logger.info(f"  ✅ 命中候选论文: {paper['published']} | {paper['title'][:60]}")
 
         if len(papers) >= max_papers:
-            logger.info(f"📌 已达到 max_papers={max_papers} 上限，停止扫描。")
+            logger.info(f"📌 已达到 max_papers={max_papers} 候选上限，停止扫描。")
             break
 
     logger.info(
@@ -233,14 +239,34 @@ def fetch_papers(config: dict) -> tuple[list[dict], list[str], date, date]:
         f"跳过(早于时间窗)={skipped_by_date}, "
         f"跳过(无关键词)={skipped_by_keyword}"
     )
-    logger.info(f"✅ 最终筛选出 {len(papers)} 篇待发送的新论文")
+    logger.info(f"✅ 最终筛选出 {len(papers)} 篇候选论文")
 
-    return papers, new_scanned_ids, cutoff_date, today_date
+    return papers, cutoff_date, today_date
 
 
 # ══════════════════════════════════════════════════
-#  4. LLM 翻译 & 总结
+#  4. LLM 学科判定 + 翻译总结
 # ══════════════════════════════════════════════════
+CLASSIFY_PROMPT = """请判断下面这篇 arXiv 论文，从研究内容上是否属于以下任一范畴：
+
+1. 软件工程（Software Engineering, cs.SE）
+2. 分布式计算 / 并行计算 / 高性能计算（Distributed, Parallel, or High Performance Computing, cs.DC）
+
+判断标准：
+- “属于”包括：软件开发、测试、调试、程序分析、代码生成、代码理解、程序修复、构建系统、软件维护、工程实践；
+- 也包括：并行计算、分布式系统、任务调度、资源管理、集群、MPI、OpenMP、GPU/HPC、性能优化、benchmarking 等；
+- 如果论文只是使用代码/软件作为应用背景，但核心研究不属于上述方向，则判为 NO；
+- 如果论文主要是 NLP、通用 AI、机器学习方法，而不是聚焦软件工程或分布式/并行/HPC问题，也判为 NO。
+
+你只能输出一行，且只能是以下两种之一：
+YES
+NO
+
+标题：{title}
+
+摘要：{abstract}
+"""
+
 SUMMARY_PROMPT = """请你作为一位资深 AI 研究员，用{language}对以下学术论文进行分析。
 
 请严格按照以下格式输出，每个板块都必须完整，不要遗漏，不要添加多余板块：
@@ -262,6 +288,55 @@ SUMMARY_PROMPT = """请你作为一位资深 AI 研究员，用{language}对以�
 """
 
 REQUIRED_SECTIONS = ["中文标题", "一句话总结", "摘要中文全文"]
+
+def llm_category_check(client: OpenAI, paper: dict, model: str) -> bool:
+    prompt = CLASSIFY_PROMPT.format(
+        title=paper["title"],
+        abstract=paper["abstract"],
+    )
+
+    max_retries = 3
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            resp = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "你是一个严格的论文分类器。"
+                            "你只能输出 YES 或 NO，不要输出任何其他内容。"
+                        ),
+                    },
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0,
+                max_tokens=10,
+            )
+
+            content = (resp.choices[0].message.content or "").strip().upper()
+
+            if content == "YES":
+                logger.info("    🟢 LLM判定: 属于 cs.SE/cs.DC 范畴")
+                return True
+            if content == "NO":
+                logger.info("    🔴 LLM判定: 不属于 cs.SE/cs.DC 范畴")
+                return False
+
+            logger.warning(f"    ⚠️ LLM分类输出异常: {content!r}")
+            if attempt < max_retries:
+                time.sleep(2 * attempt)
+                continue
+
+        except Exception as e:
+            logger.warning(f"    ⚠️ LLM分类失败(第{attempt}次): {e}")
+            if attempt < max_retries:
+                time.sleep(2 * attempt)
+                continue
+
+    logger.warning("    ⚠️ LLM分类最终失败，默认跳过该论文")
+    return False
 
 def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> str:
     prompt = SUMMARY_PROMPT.format(
@@ -324,13 +399,20 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                     time.sleep(3 * attempt)
                     continue
 
-            return f"""### 📌 中文标题\n生成失败\n\n### 💡 一句话总结\n总结生成失败（已重试{max_retries}次）\n\n### 📋 摘要中文全文\n错误：{e}"""
+            return f"""### 📌 中文标题
+生成失败
+
+### 💡 一句话总结
+总结生成失败（已重试{max_retries}次）
+
+### 📋 摘要中文全文
+错误：{e}"""
 
     return "⚠️ 总结生成失败"
 
 
 # ══════════════════════════════════════════════════
-#  5. 解析 & 构建精美 HTML
+#  5. 解析 & 构建 HTML
 # ══════════════════════════════════════════════════
 def extract_section(text: str, emoji_and_name: str) -> str:
     pattern = rf"###\s*{re.escape(emoji_and_name)}\s*\n+(.*?)(?=\n\s*###|\Z)"
@@ -352,7 +434,6 @@ def highlight_keywords(text: str, keywords: list[str]) -> str:
     if not keywords:
         return text
     for kw in keywords:
-        # 🌟 高亮时同样使用严格单词边界，避免高亮了不该高亮的字母
         pattern = re.compile(rf"\b({re.escape(kw)})\b", re.IGNORECASE)
         text = pattern.sub(
             lambda m: (
@@ -379,7 +460,6 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
     date_str = now.strftime("%Y年%m月%d日")
     weekday_str = WEEKDAY_NAMES.get(now.weekday(), "")
 
-    # 获取你配置的目标分类
     keywords = normalize_list(sc.get("keywords", []))
     keyword_mode = sc.get("keyword_mode", "none")
     target_categories = normalize_list(sc.get("categories", []))
@@ -398,18 +478,15 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
 
     all_parsed = [parse_summary(s) for s in summaries]
 
-    # 🌟 修复分类逻辑：严格按照你配置的分类进行归类
     groups = {}
     for paper, parsed in zip(papers, all_parsed):
         matched_cat = "Other"
-        # 遍历该论文的所有分类，看哪个命中了你配置的目标分类
         for cat in paper["categories"]:
             if cat in target_categories:
                 matched_cat = cat
                 break
         groups.setdefault(matched_cat, []).append((paper, parsed))
 
-    # 美化分类名称显示
     cat_names = {
         'cs.SE': '软件工程 (cs.SE)',
         'cs.CL': '计算与语言 (cs.CL)',
@@ -420,17 +497,15 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
     }
 
     group_html = ""
-    # 按照你配置文件的顺序来排序分类
     sorted_cats = sorted(groups.keys(), key=lambda x: target_categories.index(x) if x in target_categories else 999)
     global_idx = 1
 
     for cat in sorted_cats:
         items = groups[cat]
         cat_display = cat_names.get(cat, cat)
-        
-        # 🌟 优化 UI：去掉黑大粗，改为轻量级优雅的折叠标题，默认 open 展开
+
         group_html += f"""
-<details style="margin-bottom:24px;">
+<details open style="margin-bottom:24px;">
     <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
         🏷️ <span style="margin-left:4px;">{cat_display}</span> 
         <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">({len(items)} 篇)</span>
@@ -482,7 +557,6 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
             abstract_html = text_to_html_paragraphs(abstract_cn) if abstract_cn else ""
             copy_text = f"{paper['title']}\n📌 {chinese_title}\n💡 {one_line}\n🔗 {paper['url']}"
 
-            # 内部卡片也微调了阴影，使其看起来更干净
             group_html += f"""
     <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
                 border:1px solid #e2e8f0; border-left:4px solid #667eea;">
@@ -619,23 +693,23 @@ def send_email(html: str, config: dict) -> bool:
 
 
 # ══════════════════════════════════════════════════
-#  7. ★ 主函数（稳健流水线）
+#  7. 主函数
 # ══════════════════════════════════════════════════
 def main():
-    logger.info("=" * 55)
-    logger.info("   🚀 ArXiv Daily Paper Digest (稳健去重版) 启动")
-    logger.info("=" * 55)
+    logger.info("=" * 60)
+    logger.info("   🚀 ArXiv Daily Paper Digest (分流seen策略版) 启动")
+    logger.info("=" * 60)
 
     config = load_config()
 
     # ── 阶段 1：本地极速初筛与去重 ──
-    papers, new_ids, cutoff_date, today_date = fetch_papers(config)
+    papers, cutoff_date, today_date = fetch_papers(config)
 
     if not papers:
         logger.warning("📭 今天没有发现符合条件的新论文，任务结束。")
         return
 
-    # ── 阶段 2：召唤大模型进行逐篇总结 ──
+    # ── 阶段 2：初始化 LLM ──
     lc = config["llm"]
     api_key = os.environ.get("OPENAI_API_KEY", "")
     base_url = os.environ.get("OPENAI_BASE_URL", lc.get("base_url"))
@@ -654,19 +728,66 @@ def main():
     llm_interval = int(os.environ.get("LLM_INTERVAL_SECONDS", "0"))
 
     logger.info(f"🤖 LLM 启动 | 模型: {model} | 语言: {lang}")
-    logger.info(f"📝 开始处理 {len(papers)} 篇待译论文...")
 
+    # ── 阶段 3：LLM 学科过滤 + 总结 ──
+    llm_filter_cfg = config.get("llm_filter", {})
+    llm_filter_enabled = llm_filter_cfg.get("enabled", True)
+    target_categories_for_llm = normalize_list(
+        llm_filter_cfg.get("target_categories", ["cs.SE", "cs.DC"])
+    )
+
+    logger.info(f"📝 开始处理 {len(papers)} 篇候选论文...")
+    logger.info(f"🎯 LLM目标范畴: {', '.join(target_categories_for_llm)}")
+
+    filtered_papers = []
     summaries = []
+
+    rejected_ids = []   # LLM判定不属于目标学科，必须写入 seen
+    accepted_ids = []   # LLM判定通过，只有邮件成功后才写入 seen
+    skipped_by_llm_scope = 0
+
     for i, p in enumerate(papers, 1):
         logger.info(f"  [{i}/{len(papers)}] {p['title'][:60]}...")
+
+        should_summarize = True
+
+        if llm_filter_enabled:
+            if paper_in_target_categories(p, target_categories_for_llm):
+                logger.info("    ✅ 官方分类命中目标范围，直接总结")
+                should_summarize = True
+            else:
+                logger.info("    🔎 官方分类未命中目标范围，交给 LLM 二次判定")
+                should_summarize = llm_category_check(llm, p, model)
+
+        if not should_summarize:
+            skipped_by_llm_scope += 1
+            rejected_ids.append(p["base_id"])
+            logger.info("    ⏭️ 跳过：不属于 cs.SE/cs.DC 范畴，已加入 seen 待记录")
+            if i < len(papers) and llm_interval > 0:
+                time.sleep(llm_interval)
+            continue
+
         s = summarize_paper(llm, p, model, lang)
+        filtered_papers.append(p)
         summaries.append(s)
+        accepted_ids.append(p["base_id"])
 
         if i < len(papers) and llm_interval > 0:
             time.sleep(llm_interval)
 
-    # ── 阶段 3：组装 HTML ──
-    html = build_html(papers, summaries, config, cutoff_date, today_date)
+    logger.info(f"📊 LLM学科过滤后保留 {len(filtered_papers)} 篇，跳过 {skipped_by_llm_scope} 篇")
+
+    # ── 阶段 4：先记录被 LLM 拒绝的论文 ──
+    if rejected_ids:
+        save_seen_papers(rejected_ids)
+        logger.info("🗂️ 已记录 LLM 判定不相关的论文，下次不会再重复判断")
+
+    if not filtered_papers:
+        logger.warning("📭 经过 LLM 学科过滤后，没有可发送的论文，任务结束。")
+        return
+
+    # ── 阶段 5：组装 HTML ──
+    html = build_html(filtered_papers, summaries, config, cutoff_date, today_date)
 
     os.makedirs("output", exist_ok=True)
     out_path = f"output/digest_{today_date.strftime('%Y%m%d')}.html"
@@ -674,14 +795,12 @@ def main():
         f.write(html)
     logger.info(f"💾 网页副本已保存至 {out_path}")
 
-    # ── 阶段 4：发送邮件与持久化记账（防丢机制） ──
+    # ── 阶段 6：发送邮件 ──
     if send_email(html, config):
-        # ⚠️ 只有邮件发送成功后，才记录 ID！
-        # 如果发邮件报错，程序会在这里中断，新 ID 不会保存。
-        # 这样明天运行时，由于 ID 没被记录，还能重新抓取今天失败的这些论文！
-        save_seen_papers(new_ids)
+        save_seen_papers(accepted_ids)
+        logger.info("📬 邮件发送成功，已记录本次成功发送的论文 ID")
     else:
-        logger.error("🚨 邮件发送失败！本次抓取的论文 ID 不会被保存，将在下次运行时重试。")
+        logger.error("🚨 邮件发送失败！本次准备发送的论文不会写入 seen，下次会重试。")
 
     logger.info("🎉 全部流程执行完毕！")
 

@@ -1,12 +1,12 @@
 # ============================================
-# ArXiv Daily Digest 配置文件 (稳健版)
+# ArXiv Daily Digest 配置文件
 # ============================================
 
 search:
   categories:
     - cs.SE
     - cs.CL
-    - cs.DC      # 高性能计算 / 分布式计算
+    - cs.DC
     - cs.AI
 
   keywords:
@@ -21,31 +21,27 @@ search:
     - "openmp"
     - "benchmark"
 
-  # "none" - 只按分类搜索，完全忽略关键字
-  # "filter" - 按分类搜索，用关键字本地过滤（推荐，精准）
   keyword_mode: "filter"
 
-  # 豁免关键词过滤的分类列表 (这类论文直接收录)
   filter_exempt_categories:
     - cs.SE
     - cs.DC
 
   max_papers: 150
-
-  # ── 抓取时间窗 (稳健机制) ──
-  # 脚本会自动检查过去 N 天的论文，对比 seen_papers.txt，发现新论文才推送。
-  # 设为 4 天，可以完美覆盖周五下班后到周一早上的所有周末更新，绝对不会漏！
   days_back: 4
-
   timezone: "Asia/Shanghai"
 
-# LLM 配置
 llm:
   model: "deepseek-chat"
   language: "中文"
   base_url: "https://api.deepseek.com/v1"
 
-# 邮件配置
+llm_filter: #这两个分类下，不进行LLM过滤
+  enabled: true
+  target_categories:
+    - cs.SE
+    - cs.DC
+
 email:
   smtp_server: "smtp.gmail.com"
   smtp_port: 587

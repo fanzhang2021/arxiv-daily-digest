@@ -27,7 +27,7 @@ search:
     - cs.SE
     - cs.DC
 
-  max_papers: 15
+  max_papers: 150
   days_back: 4
   timezone: "Asia/Shanghai"
 

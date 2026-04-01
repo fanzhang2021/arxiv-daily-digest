@@ -505,7 +505,7 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
         cat_display = cat_names.get(cat, cat)
 
         group_html += f"""
-<details open style="margin-bottom:24px;">
+<details style="margin-bottom:24px;">
     <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
         🏷️ <span style="margin-left:4px;">{cat_display}</span> 
         <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">({len(items)} 篇)</span>

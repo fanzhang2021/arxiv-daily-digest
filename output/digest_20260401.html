@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <style>
+        details summary::-webkit-details-marker { display: none; }
+        details summary::before { content: "▶ "; font-size: 11px; margin-right: 4px; color:#a0aec0; }
+        details[open] summary::before { content: "▼ "; }
+        details[open] summary { color: #2b6cb0 !important; }
+    </style>
+    
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC',
+             'Microsoft YaHei',sans-serif;background:#f4f5f7;margin:0;padding:16px;">
+<div style="max-width:780px;margin:0 auto;">
+
+    <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;
+                padding:24px;border-radius:10px;text-align:center;margin-bottom:20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h1 style="margin:0;font-size:22px;font-weight:700;letter-spacing:0.5px;">📚 每日 ArXiv 论文精选</h1>
+        <p style="margin:8px 0 0;opacity:.9;font-size:13px;">
+            2026年04月01日 周三 Wednesday · 共精选 5 篇论文
+        </p>
+        <p style="margin:6px 0 0;font-size:11px;opacity:.7;">🔍 时间窗: 2026-03-28 ~ 至今 | 分类: cs.SE, cs.CL, cs.DC, cs.AI | 过滤: code, program, software, debugging, hpc, parallel, mpi, parallelization, openmp, benchmark</p>
+    </div>
+
+    
+<details open style="margin-bottom:24px;">
+    <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
+        🏷️ <span style="margin-left:4px;">计算与语言 (cs.CL)</span> 
+        <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">(1 篇)</span>
+    </summary>
+    <div>
+
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">1</span>
+            Training-Free Dynamic Upcycling of Expert Language Models
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 专家语言模型的无训练动态升级再造</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span></div>
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Eros Fanì, Oğuzhan Ersoy &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.LG, cs.CL<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29765v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29765v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对专家模型复用困难与多任务训练冲突的问题，提出了一种无需额外训练即可动态组合多个领域专家模型为统一混合专家模型的方法。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>大型语言模型（LLMs）在广泛的专门任务上取得了显著性能，展现出强大的问题解决能力。然而，训练这些模型的成本极其高昂，并且由于它们依赖于通用知识数据集，常常缺乏特定领域的专业知识。专家微调可以解决这个问题；然而，这常常导致过度专业化，并且由于目标分歧，开发单一的多领域专家模型仍然很困难。此外，由于干扰和灾难性遗忘，多任务训练具有挑战性。现有工作提出在混合专家（MoE）架构内结合稠密模型的专业知识，尽管这种方法仍然需要多任务微调。为了解决这些问题，我们引入了动态升级再造混合专家（DUME），这是一种新颖的方法，它重用在不同领域上训练的稠密专家来构建一个统一的MoE模型。我们的方法构建了一个单一的多任务模型，该模型保留了原始稠密专家的能力，而无需额外的训练。DUME既具有成本效益又可扩展：通过利用岭回归的闭式解，它消除了进一步优化的需要，并允许动态添加专家，同时保持模型的原始性能。我们证明，在因果语言建模和推理设置中，DUME始终优于基线方法。最后，我们还展示了DUME模型可以进行微调以进一步提高性能。我们表明，在因果语言建模设置中，DUME可以保留专门用于某一特定领域的稠密专家模型高达97.6%的性能，并且在推理设置中，它甚至可以超越该专家模型，达到稠密专家性能的102.1%。我们的代码可在以下网址获取：github.com/gensyn-ai/dume。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">Training-Free Dynamic Upcycling of Expert Language Models
+📌 专家语言模型的无训练动态升级再造
+💡 本文针对专家模型复用困难与多任务训练冲突的问题，提出了一种无需额外训练即可动态组合多个领域专家模型为统一混合专家模型的方法。
+🔗 http://arxiv.org/abs/2603.29765v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+<details open style="margin-bottom:24px;">
+    <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
+        🏷️ <span style="margin-left:4px;">分布式与并行计算 (cs.DC)</span> 
+        <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">(1 篇)</span>
+    </summary>
+    <div>
+
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">2</span>
+            M3SA: Exploring Datacenter Performance and Climate-Impact with Multi- and Meta-Model Simulation and Analysis
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 M3SA：利用多模型与元模型仿真分析探索数据中心性能与气候影响</div>
+        
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Radu Nicolae, Dante Niewenhuis, Sacheendra Talluri 等4人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.DC<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29778v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29778v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对数据中心单一模型仿真存在的局限，提出了一个结合多模型与元模型的仿真分析框架M3SA，以更全面地评估其性能与气候影响。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>数据中心对我们的数字社会至关重要，但其消耗了全球相当大一部分的电力，且需求预计将持续增长。为了提高其可持续性和性能，我们预见仿真器将成为主要的决策工具。然而，与关注水务和公共交通等其他关键社会基础设施的领域不同，数据中心仿真器尚未将多个独立模型整合到其运行中，因此存在与单一模型相关的问题，例如专业化，以及对运行现象缺乏适应性。为了应对这一挑战，我们提出了M3SA，这是一个数据中心仿真与分析框架，它使用离散事件仿真来预测每个模型在各种现实数据中心条件下对气候和性能的影响，然后综合这些预测结果。我们设计了一个用于仿真多个并发模型的架构（多模型），一种将多个模型结果整合为元模型的技术，以及一个量化元模型准确性的流程。通过对M3SA原型的实验，我们表明：（i）M3SA能够复现并增强经过同行评审的实验；（ii）M3SA能够预测运行根本不同工作负载轨迹的数据中心的运行现象（例如，故障）；（iii）M3SA支持各种类型的假设分析和方案分析，例如如何根据年度能源生产模式配置具有二氧化碳感知的迁移策略。M3SA已集成到开源仿真器OpenDC中，可通过以下网址获取：https://github.com/atlarge-research/opendc-m3sa。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">M3SA: Exploring Datacenter Performance and Climate-Impact with Multi- and Meta-Model Simulation and Analysis
+📌 M3SA：利用多模型与元模型仿真分析探索数据中心性能与气候影响
+💡 本文针对数据中心单一模型仿真存在的局限，提出了一个结合多模型与元模型的仿真分析框架M3SA，以更全面地评估其性能与气候影响。
+🔗 http://arxiv.org/abs/2603.29778v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+<details open style="margin-bottom:24px;">
+    <summary style="padding:8px 12px; cursor:pointer; font-size:14px; font-weight:600; color:#4a5568; background-color:#edf2f7; border-radius:6px; user-select:none; list-style:none; margin-bottom:12px;">
+        🏷️ <span style="margin-left:4px;">人工智能 (cs.AI)</span> 
+        <span style="margin-left:6px; font-size:12px; color:#718096; font-weight:normal;">(3 篇)</span>
+    </summary>
+    <div>
+
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">3</span>
+            Tracking vs. Deciding: The Dual-Capability Bottleneck in Searchless Chess Transformers
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 追踪与决策：无搜索象棋Transformer中的双重能力瓶颈</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span></div>
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Quanhao Li, Wei Jiang &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29761v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29761v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对仅从棋步序列训练的象棋AI模型，揭示了其状态追踪与决策质量间的矛盾，并通过模型缩放和Elo加权训练来协同提升这两项能力。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>一个类人的象棋引擎应该模仿高水平人类棋手的风格、错误和一致性，而不是最大化棋力。我们证明，仅从棋步序列进行训练会迫使模型学习两种能力：状态追踪（从棋步历史重建棋盘）和决策质量（从重建的状态中选择好的棋步）。这两者施加了矛盾的数据要求：低等级对局提供了追踪所需的多样性，而高等级对局则为决策学习提供了质量信号。移除低等级数据会降低性能。我们将这种张力形式化为一个双重能力瓶颈，P <= min(T,Q)，即整体性能受限于较弱的能力。基于这一观点，我们将模型参数从2800万扩展到1.2亿以改进追踪能力，然后引入Elo加权训练以在保持多样性的同时改进决策。一个2 x 2因子消融实验表明，缩放改进了追踪，加权改进了决策，并且它们的组合具有超加性效应。线性加权效果最佳，而过于激进的加权尽管降低了验证损失，却损害了追踪能力。我们还引入了一个覆盖衰减公式，t* = log(N/kcrit)/log b，作为对局内退化风险的可靠性界限。我们最终的1.2亿参数模型，无需搜索，在253场评级对局中达到了Lichess快棋等级分2570。在人类棋步预测任务上，它实现了55.2%的Top-1准确率，超过了Maia-2慢棋和Maia-2快棋模型。与基于棋局位置的方法不同，序列输入自然地编码了完整的对局历史，使得模型能够做出依赖于历史的决策，这是单棋局位置模型无法展现的。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">Tracking vs. Deciding: The Dual-Capability Bottleneck in Searchless Chess Transformers
+📌 追踪与决策：无搜索象棋Transformer中的双重能力瓶颈
+💡 本文针对仅从棋步序列训练的象棋AI模型，揭示了其状态追踪与决策质量间的矛盾，并通过模型缩放和Elo加权训练来协同提升这两项能力。
+🔗 http://arxiv.org/abs/2603.29761v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">4</span>
+            TSHA: A <mark style="background:#fff3cd;padding:1px 3px;border-radius:3px;">Benchmark</mark> for Visual Language Models in Trustworthy Safety Hazard Assessment Scenarios
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 TSHA：一个用于评估视觉语言模型在可信安全风险场景中性能的基准</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 software</span> <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 benchmark</span></div>
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Qiucheng Yu, Ruijie Xu, Mingang Chen 等7人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.CV, cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29759v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29759v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对现有室内安全风险评估基准存在的三大局限，提出了一个包含多源真实数据、复杂测试场景的综合性新基准TSHA。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>视觉语言模型（VLMs）的最新进展加速了其在室内安全风险评估中的应用。然而，现有基准存在三个根本性局限：（1）严重依赖通过仿真软件构建的合成数据集，与现实环境存在显著的领域差距；（2）安全任务过于简化，对危险和场景类型施加了人为限制，从而限制了模型的泛化能力；（3）缺乏严格的评估协议来全面评估模型在复杂家庭安全场景中的能力。为了应对这些挑战，我们引入了TSHA（可信安全风险评估），这是一个全面的基准，包含来自四个互补来源的81,809个精心策划的训练样本：现有室内数据集、互联网图像、AIGC图像和新捕获的图像。该基准集还包括一个极具挑战性的测试集，包含1707个样本，不仅包含从训练分布中精心挑选的子集，还新增了包含多种安全隐患的视频和全景图像，用于评估模型在复杂安全场景中的鲁棒性。对23个流行VLM的广泛实验表明，当前的VLM缺乏强大的安全风险评估能力。重要的是，在TSHA训练集上训练的模型不仅在TSHA测试集上实现了高达+18.3分的显著性能提升，而且在其他基准上也表现出增强的泛化能力，这突显了TSHA基准的重大贡献和重要性。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">TSHA: A Benchmark for Visual Language Models in Trustworthy Safety Hazard Assessment Scenarios
+📌 TSHA：一个用于评估视觉语言模型在可信安全风险场景中性能的基准
+💡 本文针对现有室内安全风险评估基准存在的三大局限，提出了一个包含多源真实数据、复杂测试场景的综合性新基准TSHA。
+🔗 http://arxiv.org/abs/2603.29759v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
+                border:1px solid #e2e8f0; border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#2d3748;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:#ebf4ff;
+                         color:#4c51bf;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">5</span>
+            Reinforced Reasoning for End-to-End Retrosynthetic Planning
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 基于强化推理的端到端逆合成规划</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 mpi</span></div>
+
+        <div style="color:#718096;font-size:11px;margin:8px 0;padding-bottom:8px;
+                    border-bottom:1px dashed #edf2f7;">
+            👤 Chenyang Zuo, Siqi Fan, Yizhen Luo 等4人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29723v1" style="color:#4299e1;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29723v1" style="color:#4299e1;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对逆合成规划的组合复杂性挑战，提出了ReTriP端到端生成框架，通过路径连贯的分子表示和渐进式训练，将逆合成重构为直接的思维链推理任务。</div>
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>逆合成规划是有机化学中的一项基本任务，但由于其组合复杂性，仍然具有挑战性。为了解决这个问题，传统方法通常依赖于将单步预测与外部搜索启发式方法相结合的混合框架，这不可避免地破坏了局部分子转化与全局规划目标之间的逻辑连贯性。为了弥合这一差距，并将复杂的战略前瞻性直接嵌入到模型的化学推理中，我们引入了ReTriP，这是一个端到端的生成框架，它将逆合成重新表述为一个直接的思维链推理任务。我们建立了一种路径连贯的分子表示，并采用了一种渐进式训练课程，从推理蒸馏过渡到带有可验证奖励的强化学习，从而有效地将逐步生成与实际路线效用对齐。在RetroBench上的实证评估表明，ReTriP实现了最先进的性能，与混合基线相比，在长程规划中表现出卓越的鲁棒性。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#a0aec0;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制卡片文本</span>
+            </summary>
+            <pre style="background:#f7fafc;border:1px solid #edf2f7;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#4a5568;user-select:all;cursor:text;">Reinforced Reasoning for End-to-End Retrosynthetic Planning
+📌 基于强化推理的端到端逆合成规划
+💡 本文针对逆合成规划的组合复杂性挑战，提出了ReTriP端到端生成框架，通过路径连贯的分子表示和渐进式训练，将逆合成重构为直接的思维链推理任务。
+🔗 http://arxiv.org/abs/2603.29723v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+
+    <div style="text-align:center;color:#a0aec0;font-size:11px;margin-top:30px;padding:10px;">
+        🤖 由 <strong>ArXiv Daily Digest</strong> 自动精选生成
+    </div>
+</div>
+</body></html>

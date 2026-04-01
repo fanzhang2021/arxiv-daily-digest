@@ -2,20 +2,20 @@ name: 📚 Daily ArXiv Digest
 
 on:
   schedule:
-    # 北京时间 周二~周六 上午 10:00
-    # = UTC 周二~周六 02:00
+    # 北京时间 周二~周六 上午 10:00 (UTC 02:00)
+    # 因为有了去重机制，即便你改成每天运行 (* * * * *) 也不会重复发邮件。
     - cron: "0 2 * * 2-6"
 
   workflow_dispatch:
     inputs:
       force_run:
-        description: "强制运行（忽略周末跳过逻辑）"
+        description: "手动触发运行"
         required: false
-        default: "false"
-        type: choice
-        options:
-          - "false"
-          - "true"
+        default: "true"
+
+# ★ 新增：赋予 Action 推送代码到仓库的权限
+permissions:
+  contents: write
 
 jobs:
   digest:
@@ -25,6 +25,9 @@ jobs:
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
+        with:
+          # ★ 必须设置 fetch-depth 为 0 或足够的深度以支持 commit
+          fetch-depth: 0 
 
       - name: 🐍 Setup Python
         uses: actions/setup-python@v5
@@ -33,7 +36,9 @@ jobs:
           cache: "pip"
 
       - name: 📦 Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          # 如果你没有 requirements.txt，确保运行下行代码
+          pip install arxiv pyyaml openai
 
       - name: 🚀 Run digest
         env:
@@ -44,10 +49,15 @@ jobs:
           TO_EMAIL:            ${{ secrets.TO_EMAIL }}
           SMTP_SERVER:         ${{ secrets.SMTP_SERVER }}
           SMTP_PORT:           ${{ secrets.SMTP_PORT }}
-          FORCE_RUN:           ${{ github.event.inputs.force_run || 'false' }}
           LLM_MODEL:           ${{ secrets.LLM_MODEL }}
-          LLM_INTERVAL_SECONDS: ${{ secrets.LLM_INTERVAL_SECONDS }}
         run: python main.py
+
+      # ★ 新增：这一步极其关键！将 Python 脚本生成的 seen_papers.txt 提交并推送到 Github
+      - name: 💾 Commit and push seen_papers.txt
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(bot): update seen_papers.txt [skip ci]"
+          file_pattern: "seen_papers.txt"
 
       - name: 📎 Upload artifact
         if: always()
@@ -55,4 +65,4 @@ jobs:
         with:
           name: digest-${{ github.run_number }}
           path: output/
-          retention-days: 30
+          retention-days: 10

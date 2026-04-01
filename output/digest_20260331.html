@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <style>
+        details summary::-webkit-details-marker { display: none; }
+        details summary::before {
+            content: "▶ ";
+            font-size: 11px;
+            margin-right: 3px;
+        }
+        details[open] summary::before {
+            content: "▼ ";
+        }
+        details[open] summary {
+            color: #764ba2 !important;
+        }
+        details {
+            margin-bottom: 20px;
+        }
+    </style>
+    
+</head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC',
+             'Microsoft YaHei',sans-serif;background:#f4f5f7;margin:0;padding:16px;">
+<div style="max-width:780px;margin:0 auto;">
+
+    <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;
+                padding:28px 24px;border-radius:10px;text-align:center;margin-bottom:16px;">
+        <h1 style="margin:0;font-size:24px;font-weight:700;">📚 每日 ArXiv 论文精选</h1>
+        <p style="margin:8px 0 0;opacity:.9;font-size:14px;">
+            2026年04月01日 周三 Wednesday · 共 10 篇论文
+        </p>
+        <p style="margin:4px 0 0;font-size:11px;opacity:.65;">🔍 论文日期: 2026-03-31 | 分类: cs.SE, cs.CL, cs.DC, cs.AI | 过滤: code, program, software, debugging, hpc, parallel, mpi, parallelization, openmp, benchmark</p>
+    </div>
+
+    
+<details style="margin-bottom:20px; background:#fff; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+    <summary style="background:linear-gradient(135deg,#f8f9fa,#e9ecef); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:16px; color:#1a1a2e; user-select:none; list-style:none;">
+        📂 Artificial Intelligence <span style="font-size:13px; color:#667eea;">(4篇)</span>
+    </summary>
+    <div style="padding:12px 16px;">
+
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">1</span>
+            C-TRAIL: A Commonsense World Framework for Trajectory Planning in Autonomous Driving
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 C-TRAIL：一种用于自动驾驶轨迹规划的常识世界框架</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Zhihong Cui, Haoran Tang, Tianyi Li 等7人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29908v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29908v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>针对大语言模型用于自动驾驶轨迹规划时输出不可靠的问题，本文提出了C-TRAIL框架，通过结合常识与信任机制来安全地指导规划。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>自动驾驶的轨迹规划越来越多地利用大语言模型进行常识推理，然而大语言模型的输出本质上是不可靠的，这在安全关键应用中构成风险。我们提出了C-TRAIL，一个建立在“常识世界”之上的框架，它将大语言模型衍生的常识与信任机制相结合，以指导轨迹规划。C-TRAIL通过一个闭环的“回忆、规划与更新”周期运行：回忆模块查询大语言模型以获取语义关系，并通过双重信任机制量化其可靠性；规划模块通过狄利克雷信任策略将加权信任的常识注入蒙特卡洛树搜索；更新模块则根据环境反馈自适应地优化信任分数和策略参数。在Highway-env中的四个模拟场景以及两个真实世界levelXData数据集（highD, rounD）上的实验表明，C-TRAIL始终优于最先进的基线方法，平均将ADE降低了40.2%，将FDE降低了51.7%，并将SR提高了16.9个百分点。源代码可在 https://github.com/ZhihongCui/CTRAIL 获取。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">C-TRAIL: A Commonsense World Framework for Trajectory Planning in Autonomous Driving
+📌 C-TRAIL：一种用于自动驾驶轨迹规划的常识世界框架
+💡 针对大语言模型用于自动驾驶轨迹规划时输出不可靠的问题，本文提出了C-TRAIL框架，通过结合常识与信任机制来安全地指导规划。
+🔗 http://arxiv.org/abs/2603.29908v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">2</span>
+            ATP-Bench: Towards Agentic Tool Planning for MLLM Interleaved Generation
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 ATP-Bench：迈向多模态大语言模型交错生成的智能体工具规划</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span> <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 benchmark</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Yinuo Liu, Zi Qian, Heng Zhou 等10人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29902v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29902v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对多模态大语言模型在交错图文生成中难以统一事实性与创造性的问题，提出了一个名为ATP-Bench的基准和一个多智能体MLLM即法官系统来评估智能体工具规划能力。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>交错文本与图像生成代表了多模态大语言模型（MLLMs）的一个重要前沿，它提供了一种更直观的方式来传达复杂信息。当前的范式依赖于图像生成或检索增强，但它们通常将这两者视为互斥的路径，未能将事实性与创造性统一起来。我们认为，该领域的下一个里程碑是智能体工具规划，即模型作为一个中央控制器，自主决定何时、何地以及调用何种工具，以针对视觉关键查询生成交错响应。为了系统评估这一范式，我们引入了ATP-Bench，这是一个新颖的基准，包含跨越八个类别和25种视觉关键意图的7,702个问答对（包括1,592个视觉问答对），其查询和真实答案均经过人工验证。此外，为了独立于端到端执行和变化的工具后端来评估智能体规划，我们提出了一个多智能体MLLM即法官（MAM）系统。MAM评估工具调用的精确性，识别错失的工具使用机会，并在不需要真实答案参考的情况下评估整体响应质量。我们在10个最先进的多模态大语言模型上进行的大量实验表明，模型在连贯的交错规划方面存在困难，并且在工具使用行为上表现出显著差异，这突显了巨大的改进空间，并为推进交错生成提供了可操作的指导。数据集和代码可在 https://github.com/Qwen-Applications/ATP-Bench 获取。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">ATP-Bench: Towards Agentic Tool Planning for MLLM Interleaved Generation
+📌 ATP-Bench：迈向多模态大语言模型交错生成的智能体工具规划
+💡 本文针对多模态大语言模型在交错图文生成中难以统一事实性与创造性的问题，提出了一个名为ATP-Bench的基准和一个多智能体MLLM即法官系统来评估智能体工具规划能力。
+🔗 http://arxiv.org/abs/2603.29902v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">3</span>
+            ShapE-GRPO: Shapley-Enhanced Reward Allocation for Multi-Candidate LLM Training
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 ShapE-GRPO：用于多候选大语言模型训练的沙普利值增强奖励分配</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span> <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 mpi</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Rui Ai, Yu Pan, David Simchi-Levi 等4人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29871v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29871v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对多候选推荐场景中，现有强化学习后训练方法对所有候选分配相同奖励导致训练信号模糊的问题，提出了基于合作博弈论沙普利值的细粒度奖励分解方法。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>在推荐、头脑风暴和代码建议等用户-智能体交互场景中，大语言模型（LLMs）通常会生成一组候选推荐，其目标是最大化整个集合的集体效用，而非单个候选的独立效用。然而，现有的强化学习后训练范式，例如组相对策略优化（GRPO），通常为集合中的每个候选分配相同的集合级标量奖励。这导致了嘈杂的训练信号，其中表现不佳的候选会搭上单个强大同伴产生的高奖励便车，从而导致次优探索。为解决此问题，我们提出了沙普利值增强的GRPO（ShapE-GRPO）。通过利用集合级效用的排列不变性，我们从合作博弈论中推导出一个沙普利值增强的公式，将集合级奖励分解为细粒度的、特定于候选的信号。我们证明了我们的公式保留了沙普利值的基本公理，同时保持了多项式时间复杂度的计算效率。实证结果表明，ShapE-GRPO在多个不同数据集上始终优于标准GRPO，并且在训练期间加速了收敛。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">ShapE-GRPO: Shapley-Enhanced Reward Allocation for Multi-Candidate LLM Training
+📌 ShapE-GRPO：用于多候选大语言模型训练的沙普利值增强奖励分配
+💡 本文针对多候选推荐场景中，现有强化学习后训练方法对所有候选分配相同奖励导致训练信号模糊的问题，提出了基于合作博弈论沙普利值的细粒度奖励分解方法。
+🔗 http://arxiv.org/abs/2603.29871v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">4</span>
+            Owl-AuraID 1.0: An Intelligent System for Autonomous Scientific Instrumentation and Scientific Data Analysis
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 Owl-AuraID 1.0：用于自主科学仪器操作与科学数据分析的智能系统</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span> <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 software</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Han Deng, Anqi Zou, Hanling Zhang 等17人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AI, cs.CL<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29828v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29828v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>针对科学仪器自动化受限于专有图形界面和现有API系统通用性差的问题，本文提出了一个基于GUI原生范式的软硬件协同体现代理系统。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>科学发现日益依赖于高通量表征，但自动化进程受到专有图形用户界面以及现有基于API的系统通用性有限的阻碍。我们提出了Owl-AuraID，这是一个软件-硬件协同的体现代理系统，它采用GUI原生范式，通过与人机专家相同的界面来操作仪器。其以技能为中心的框架将类型1（GUI操作）和类型2（数据分析）技能集成到端到端的工作流程中，将物理样品处理与科学解释连接起来。Owl-AuraID展示了其在十类精密仪器和多样化工作流程中的广泛覆盖能力，包括多模态光谱分析、显微成像和晶体学分析，支持诸如FTIR、NMR、AFM和TGA等多种模态。总体而言，Owl-AuraID为自主实验室提供了一个实用、可扩展的基础，并展示了一条通过可重用的操作和分析技能来发展实验室智能的路径。代码可在 https://github.com/OpenOwlab/AuraID 获取。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">Owl-AuraID 1.0: An Intelligent System for Autonomous Scientific Instrumentation and Scientific Data Analysis
+📌 Owl-AuraID 1.0：用于自主科学仪器操作与科学数据分析的智能系统
+💡 针对科学仪器自动化受限于专有图形界面和现有API系统通用性差的问题，本文提出了一个基于GUI原生范式的软硬件协同体现代理系统。
+🔗 http://arxiv.org/abs/2603.29828v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+<details style="margin-bottom:20px; background:#fff; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+    <summary style="background:linear-gradient(135deg,#f8f9fa,#e9ecef); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:16px; color:#1a1a2e; user-select:none; list-style:none;">
+        📂 Computation and Language <span style="font-size:13px; color:#667eea;">(2篇)</span>
+    </summary>
+    <div style="padding:12px 16px;">
+
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">5</span>
+            FLEURS-Kobani: Extending the FLEURS Dataset for Northern Kurdish
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 FLEURS-Kobani：扩展 FLEURS 数据集以支持北库尔德语</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 parallel</span> <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 benchmark</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Daban Q. Jaff, Mohammad Mohammadamini &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.CL<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29892v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29892v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对北库尔德语缺乏语音基准数据集的问题，通过构建并发布 FLEURS-Kobani 数据集，为自动语音识别和语音翻译任务提供了首个公开评估基准。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>FLEURS 为 100 多种语言提供了 n 路平行语音，但北库尔德语不在其中，这限制了该语言在自动语音识别和语音翻译任务上的基准测试。我们提出了 FLEURS-Kobani，这是 FLEURS 基准的一个北库尔德语（ISO 639-3 KMR）口语扩展。FLEURS-Kobani 数据集包含 5,162 条经过验证的话语，总计 18 小时 24 分钟。数据由 31 名母语者录制。它将基准覆盖范围扩展到了一个资源匮乏的库尔德语变体。作为基线，我们微调了 Whisper v3-large 模型用于自动语音识别和端到端语音到文本翻译。一个两阶段的微调策略（从 Common Voice 到 FLEURS-Kobani）产生了最佳的自动语音识别性能（在测试集上词错误率为 28.11，字错误率为 9.84）。对于端到端语音到文本翻译（北库尔德语到英语），Whisper 在测试集上达到了 8.68 BLEU 分数；我们还额外报告了基于枢轴翻译生成的目标以及一个级联的语音到文本翻译设置。FLEURS-Kobani 为评估自动语音识别、语音到文本翻译和语音到语音翻译任务提供了首个公开的北库尔德语基准。该数据集已根据 CC BY 4.0 许可公开发布，供研究使用。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">FLEURS-Kobani: Extending the FLEURS Dataset for Northern Kurdish
+📌 FLEURS-Kobani：扩展 FLEURS 数据集以支持北库尔德语
+💡 本文针对北库尔德语缺乏语音基准数据集的问题，通过构建并发布 FLEURS-Kobani 数据集，为自动语音识别和语音翻译任务提供了首个公开评估基准。
+🔗 http://arxiv.org/abs/2603.29892v1</pre>
+        </details>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">6</span>
+            SNEAK: Evaluating Strategic Communication and Information Leakage in Large Language Models
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 SNEAK：评估大语言模型中的策略性沟通与信息泄露</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 benchmark</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Adar Avsian, Larry Heck &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.CL<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29846v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29846v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对大语言模型在多智能体环境中策略性沟通的评估缺失问题，提出了SNEAK基准来量化模型在信息不对称下选择性共享信息的能力。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>大语言模型越来越多地被部署在多智能体环境中，其中的沟通必须在信息量和保密性之间取得平衡。在此类环境中，智能体可能需要向协作者传递信息，同时防止对手推断出敏感细节。然而，现有的大语言模型基准主要评估推理、事实知识或指令遵循等能力，并未直接衡量信息不对称下的策略性沟通。我们引入了SNEAK（面向对抗性知识的秘密感知自然语言评估），这是一个用于评估语言模型中选择性信息共享的基准。在SNEAK中，模型被给定一个语义类别、一组候选词和一个秘密词，并且必须生成一条消息，该消息表明其知晓该秘密，但又不能过于清晰地泄露它。我们使用两个具有不同信息状态的模拟智能体来评估生成的消息：一个是盟友，它知道秘密并必须识别出预期消息；另一个是伪装者，它不知道秘密并试图从消息中推断出秘密。这产生了两个互补的指标：效用，衡量消息与协作者沟通的效果；以及泄露，衡量消息向对手透露了多少信息。利用这个框架，我们分析了现代语言模型中信息量与保密性之间的权衡，并表明信息不对称下的策略性沟通对于当前系统而言仍然是一项具有挑战性的能力。值得注意的是，人类参与者的表现远超所有被评估的模型，得分最高可达模型的四倍。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">SNEAK: Evaluating Strategic Communication and Information Leakage in Large Language Models
+📌 SNEAK：评估大语言模型中的策略性沟通与信息泄露
+💡 本文针对大语言模型在多智能体环境中策略性沟通的评估缺失问题，提出了SNEAK基准来量化模型在信息不对称下选择性共享信息的能力。
+🔗 http://arxiv.org/abs/2603.29846v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+<details style="margin-bottom:20px; background:#fff; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+    <summary style="background:linear-gradient(135deg,#f8f9fa,#e9ecef); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:16px; color:#1a1a2e; user-select:none; list-style:none;">
+        📂 Software Engineering <span style="font-size:13px; color:#667eea;">(1篇)</span>
+    </summary>
+    <div style="padding:12px 16px;">
+
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">7</span>
+            SkillReducer: Optimizing LLM Agent Skills for Token Efficiency
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 SkillReducer：优化LLM智能体技能以实现令牌效率</div>
+        
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Yudong Gao, Zongjie Li, Yuanyuanyuan 等6人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.SE<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29919v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29919v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对LLM编码智能体技能描述冗长、内容低效导致令牌成本高和注意力分散的问题，提出了一个两阶段优化框架SkillReducer来压缩和重构技能内容。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>基于LLM的编码智能体依赖于*技能*——这些预打包的指令集扩展了智能体的能力，然而注入到上下文窗口中的每一个技能内容令牌都会产生货币成本并导致注意力稀释。为了理解这个问题的严重性，我们对55,315个公开可用的技能进行了大规模实证研究，发现了系统性的低效问题：26.4%的技能完全缺乏路由描述，超过60%的主体内容是不可操作的，并且每次调用时参考文件可能注入数万个令牌。基于这些发现，我们提出了SkillReducer，一个两阶段优化框架。阶段1通过压缩冗长的描述并通过对抗性增量调试生成缺失的描述来优化路由层。阶段2通过分类驱动的分类和渐进式披露来重构技能主体，将可操作的核心规则与按需加载的补充内容分离开来，并通过忠实度检查和自校正反馈循环进行验证。在600个技能和SkillsBench基准测试上的评估表明，SkillReducer实现了48%的描述压缩和39%的主体压缩，同时将功能质量提高了2.8%，揭示了一种*少即是多*的效应，即移除非必要内容可以减少上下文窗口中的注意力分散。这些益处跨四个系列的五个模型得以转移，平均保留率为0.965，并且可以推广到一个独立的智能体框架。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">SkillReducer: Optimizing LLM Agent Skills for Token Efficiency
+📌 SkillReducer：优化LLM智能体技能以实现令牌效率
+💡 本文针对LLM编码智能体技能描述冗长、内容低效导致令牌成本高和注意力分散的问题，提出了一个两阶段优化框架SkillReducer来压缩和重构技能内容。
+🔗 http://arxiv.org/abs/2603.29919v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+<details style="margin-bottom:20px; background:#fff; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+    <summary style="background:linear-gradient(135deg,#f8f9fa,#e9ecef); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:16px; color:#1a1a2e; user-select:none; list-style:none;">
+        📂 cs.AR <span style="font-size:13px; color:#667eea;">(1篇)</span>
+    </summary>
+    <div style="padding:12px 16px;">
+
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">8</span>
+            SISA: A Scale-In Systolic Array for GEMM Acceleration
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 SISA：一种用于通用矩阵乘法加速的尺度不变脉动阵列</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 parallel</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Luigi Altamura, Alessio Cicero, Mateo Vázquez Maceiras 等5人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.AR, cs.AI<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29913v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29913v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对大语言模型中矩阵形状不规则导致传统方形脉动阵列利用率低的问题，提出了一种可分割为矩形子阵列的尺度不变脉动阵列架构。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>当前占主导地位的人工智能/机器学习工作负载，例如大语言模型，依赖于通用矩阵乘法操作的高效执行。因此，大多数系统都配备了基于方形处理单元脉动阵列的专用矩阵硬件加速器。虽然这种组织方式对于传统的深度神经网络是有效的，但大语言模型引入了输入依赖且高度不规则的矩阵，导致脉动阵列资源利用率不足。为了应对这一挑战，我们提出了SISA（尺度不变脉动阵列），这是一种新颖的脉动阵列架构，它将传统的方形阵列划分为水平的矩形板。SISA以最小的开销，通过独立调度的板来暴露并行性，以高效执行小型或不规则矩阵形状的计算，同时保留全阵列操作以处理大型通用矩阵乘法。与具有相同数量处理单元的最先进单体脉动阵列相比，SISA在代表性大语言模型上实现了高达8.52倍的加速和93%的能量延迟积降低。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">SISA: A Scale-In Systolic Array for GEMM Acceleration
+📌 SISA：一种用于通用矩阵乘法加速的尺度不变脉动阵列
+💡 本文针对大语言模型中矩阵形状不规则导致传统方形脉动阵列利用率低的问题，提出了一种可分割为矩形子阵列的尺度不变脉动阵列架构。
+🔗 http://arxiv.org/abs/2603.29913v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+<details style="margin-bottom:20px; background:#fff; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+    <summary style="background:linear-gradient(135deg,#f8f9fa,#e9ecef); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:16px; color:#1a1a2e; user-select:none; list-style:none;">
+        📂 cs.CV <span style="font-size:13px; color:#667eea;">(1篇)</span>
+    </summary>
+    <div style="padding:12px 16px;">
+
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">9</span>
+            Less Is More? Selective Visual Attention to High-Importance Regions for Multimodal Radiology Summarization
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 少即是多？针对多模态放射学总结任务对高重要性区域进行选择性视觉注意</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 benchmark</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Mst. Fahmida Sultana Naznin, Adnan Ibney Faruq, Mushfiqur Rahman 等6人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.CV, cs.CL<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29901v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29901v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对多模态放射学报告总结中视觉噪声干扰问题，提出了一种选择性关注病理相关图像区域而非全图的方法，显著提升了总结性能。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>自动化放射学报告总结旨在将冗长的检查发现提炼为简洁的临床印象，但现有的多模态模型常常受到视觉噪声的困扰，并且在“检查发现”到“临床印象”的转换任务中，未能比强大的纯文本基线模型实现有意义的提升。我们挑战了两个普遍假设：（1）更多的视觉输入总是更好；（2）当检查发现已经包含丰富的图像衍生细节时，多模态模型增加的价值有限。通过在 MIMIC-CXR 基准上进行受控消融实验，我们证明，选择性地关注与病理相关的视觉图像块，而非完整图像，能显著获得更好的性能。我们引入了 ViTAS（视觉-文本注意力总结器），这是一个多阶段流程，它结合了集成引导的 MedSAM2 肺部分割、用于多视图融合的双向交叉注意力、Shapley 引导的自适应图像块聚类，以及为视觉变换器提供输入的分层视觉标记化。ViTAS 取得了最先进的结果，BLEU-4 得分为 29.25%，ROUGE-L 得分为 69.83%，定性分析显示其事实一致性得到改善，并获得了专家评分最高的人类评估分数。我们的研究结果表明，更少但更相关的视觉输入对于多模态放射学总结不仅足够，而且更优。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">Less Is More? Selective Visual Attention to High-Importance Regions for Multimodal Radiology Summarization
+📌 少即是多？针对多模态放射学总结任务对高重要性区域进行选择性视觉注意
+💡 本文针对多模态放射学报告总结中视觉噪声干扰问题，提出了一种选择性关注病理相关图像区域而非全图的方法，显著提升了总结性能。
+🔗 http://arxiv.org/abs/2603.29901v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+<details style="margin-bottom:20px; background:#fff; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+    <summary style="background:linear-gradient(135deg,#f8f9fa,#e9ecef); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:16px; color:#1a1a2e; user-select:none; list-style:none;">
+        📂 cs.RO <span style="font-size:13px; color:#667eea;">(1篇)</span>
+    </summary>
+    <div style="padding:12px 16px;">
+
+    <div style="background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;
+                box-shadow:0 1px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea;">
+
+        <div style="font-size:15px;font-weight:bold;color:#1a1a2e;margin-bottom:2px;line-height:1.4;">
+            <span style="display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);
+                         color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;
+                         line-height:24px;font-size:12px;font-weight:bold;margin-right:6px;">10</span>
+            DIAL: Decoupling Intent and Action via Latent World Modeling for End-to-End VLA
+        </div>
+
+        <div style="font-size:14px;color:#555;margin-top:4px;margin-left:36px;font-weight:500;">📌 DIAL：通过潜在世界建模实现意图与动作解耦的端到端视觉-语言-动作模型</div>
+        <div style="margin-top:4px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 code</span> <span style="background:#e8f5e9;color:#2e7d32;font-size:11px;padding:2px 6px;border-radius:4px;margin-right:4px;">🔑 benchmark</span></div>
+
+        <div style="color:#888;font-size:11px;margin:6px 0 8px;padding-bottom:8px;
+                    border-bottom:1px solid #f0f0f0;">
+            👤 Yi Chen, Yuying Ge, Hui Zhou 等6人 &nbsp;|&nbsp; 📅 2026-03-31 &nbsp;|&nbsp; 🏷️ cs.RO, cs.AI, cs.CV<br>
+            🔗 <a href="http://arxiv.org/abs/2603.29844v1" style="color:#667eea;text-decoration:none;">arXiv</a>
+            &nbsp;·&nbsp;
+            📄 <a href="https://arxiv.org/pdf/2603.29844v1" style="color:#667eea;text-decoration:none;">PDF</a>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:8px;padding:10px 14px;margin:8px 0 6px;font-size:13px;color:#333;line-height:1.5;"><strong style="color:#667eea;">💡 </strong>本文针对端到端视觉-语言-动作模型训练不稳定、未能充分利用预训练模型高层决策潜力的问题，提出了通过潜在意图瓶颈桥接高层决策与底层执行的两阶段训练框架。</div>
+
+        <details style="cursor:pointer;margin-top:4px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#333;
+                        margin-top:8px;padding:10px;background:#fafbfc;
+                        border-radius:6px;border:1px solid #f0f0f0;">
+                <p style='margin:3px 0;line-height:1.5;color:#333;'>预训练的视觉-语言模型显著加速了视觉-语言-动作模型的发展。然而，大多数现有的端到端视觉-语言-动作模型主要将视觉-语言模型视为多模态编码器，直接将视觉-语言特征映射到低层动作。这种范式未能充分利用视觉-语言模型在高层决策方面的潜力，并引入了训练不稳定性，常常会使其丰富的语义表征退化。为了解决这些局限性，我们引入了DIAL，这是一个通过可微分的潜在意图瓶颈来桥接高层决策与底层运动执行的框架。具体来说，一个基于视觉-语言模型的系统-2通过在其原生特征空间内合成潜在的视觉前瞻来进行潜在世界建模；这种前瞻明确地编码了意图，并作为结构瓶颈。然后，一个轻量级的系统-1策略通过潜在逆动力学，将这一预测的意图与当前观测一起解码为精确的机器人动作。为了确保优化稳定性，我们采用了两阶段训练范式：一个解耦的预热阶段，其中系统-2学习预测潜在未来，而系统-1在统一特征空间内、在真实未来指导下学习运动控制；随后是无缝的端到端联合优化。这使得动作感知梯度能够以受控的方式优化视觉-语言模型主干，从而保留预训练知识。在RoboCasa GR1 Tabletop基准上进行的大量实验表明，DIAL确立了新的最先进水平，在演示数据量比先前方法少10倍的情况下实现了更优的性能。此外，通过利用异构的人类演示，DIAL学习了物理上扎根的操作先验，并在人形机器人上的真实世界部署中，对未见过的物体和新颖配置展现出强大的零样本泛化能力。</p>
+            </div>
+        </details>
+
+        <details style="cursor:pointer;margin-top:2px;">
+            <summary style="font-size:12px;font-weight:600;color:#aaa;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📎 复制本条</span>
+            </summary>
+            <pre style="background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;
+                        padding:10px;margin-top:6px;font-size:12px;line-height:1.5;
+                        font-family:Consolas,'Microsoft YaHei',monospace;
+                        white-space:pre-wrap;word-wrap:break-word;
+                        color:#333;user-select:all;cursor:text;">DIAL: Decoupling Intent and Action via Latent World Modeling for End-to-End VLA
+📌 DIAL：通过潜在世界建模实现意图与动作解耦的端到端视觉-语言-动作模型
+💡 本文针对端到端视觉-语言-动作模型训练不稳定、未能充分利用预训练模型高层决策潜力的问题，提出了通过潜在意图瓶颈桥接高层决策与底层执行的两阶段训练框架。
+🔗 http://arxiv.org/abs/2603.29844v1</pre>
+        </details>
+    </div>
+    </div>
+</details>
+
+
+    <div style="text-align:center;color:#aaa;font-size:10px;margin-top:20px;padding:10px;">
+        🤖 由 <strong>ArXiv Daily Digest</strong> 自动生成
+    </div>
+</div>
+</body></html>

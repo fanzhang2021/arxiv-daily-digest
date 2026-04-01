@@ -30,7 +30,7 @@ search:
     - cs.SE
     - cs.DC
 
-  max_papers: 200
+  max_papers: 150
 
   # ── 抓取时间窗 (稳健机制) ──
   # 脚本会自动检查过去 N 天的论文，对比 seen_papers.txt，发现新论文才推送。

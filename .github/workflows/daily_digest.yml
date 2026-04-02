@@ -13,7 +13,7 @@ on:
         required: false
         default: "true"
 
-# ★ 新增：赋予 Action 推送代码到仓库的权限
+# 赋予 Action 推送代码到仓库的权限
 permissions:
   contents: write
 
@@ -26,7 +26,7 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
         with:
-          # ★ 必须设置 fetch-depth 为 0 或足够的深度以支持 commit
+          # 必须设置 fetch-depth 为 0 或足够的深度以支持 commit
           fetch-depth: 0 
 
       - name: 🐍 Setup Python
@@ -52,12 +52,14 @@ jobs:
           LLM_MODEL:           ${{ secrets.LLM_MODEL }}
         run: python main.py
 
-      # ★ 新增：这一步极其关键！将 Python 脚本生成的 seen_papers.txt 提交并推送到 Github
+      # ★ 关键修改：添加 pull_before_push 和 rebase 选项，解决 non-fast-forward 错误
       - name: 💾 Commit and push seen_papers.txt
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(bot): update seen_papers.txt [skip ci]"
           file_pattern: "seen_papers.txt"
+          pull_before_push: true
+          pull_args: '--rebase'
 
       - name: 📎 Upload artifact
         if: always()

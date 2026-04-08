@@ -168,7 +168,7 @@ def fetch_papers(config: dict) -> tuple[list[dict], date, date]:
         sort_order=arxiv.SortOrder.Descending,
     )
 
-    client = arxiv.Client(page_size=50, delay_seconds=10.0, num_retries=5)
+    client = arxiv.Client(page_size=50, delay_seconds=10.0, num_retries=3)
 
     papers = []
 

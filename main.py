@@ -158,7 +158,7 @@ def fetch_papers(config: dict) -> tuple[list[dict], date, date]:
     logger.info(f"🔧 关键字模式: {keyword_mode}")
     logger.info(f"📌 最大候选论文数: {max_papers}")
 
-    fetch_limit = max(1000, max_papers * 50)
+    fetch_limit = max(500, max_papers * 50)
     logger.info(f"📥 API 最大抓取上限: {fetch_limit}")
 
     search = arxiv.Search(
@@ -168,7 +168,7 @@ def fetch_papers(config: dict) -> tuple[list[dict], date, date]:
         sort_order=arxiv.SortOrder.Descending,
     )
 
-    client = arxiv.Client(page_size=100, delay_seconds=3.0, num_retries=3)
+    client = arxiv.Client(page_size=50, delay_seconds=10.0, num_retries=5)
 
     papers = []
 

@@ -32,7 +32,7 @@ search:
   timezone: "Asia/Shanghai"
 
 llm:
-  model: "deepseek-chat"
+  model: "deepseek-v4-flash"
   language: "中文"
   base_url: "https://api.deepseek.com/v1"
 

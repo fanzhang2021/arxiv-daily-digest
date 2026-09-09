@@ -6,8 +6,8 @@ search:
   categories:
     - cs.SE
     - cs.CL
-    - cs.DC
     - cs.AI
+#   - cs.DC
 
   keywords:
     - "code"

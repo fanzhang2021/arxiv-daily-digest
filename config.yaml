@@ -32,9 +32,9 @@ search:
   timezone: "Asia/Shanghai"
 
 llm:
-  model: "deepseek-v4-flash"
+  model: "DeepSeek-V4.1-Flash"
   language: "中文"
-  base_url: "https://api.deepseek.com/v1"
+  base_url: "https://www.autodl.art/api/v1"
 
 llm_filter: #这两个分类下，不进行LLM过滤
   enabled: true

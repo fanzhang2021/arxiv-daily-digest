@@ -275,10 +275,7 @@ SUMMARY_PROMPT = """请你作为一位资深 AI 研究员，用{language}对以�
 [准确翻译英文标题，一行即可]
 
 ### 💡 一句话总结
-[用一句话概括：这篇论文针对什么问题，提出了什么方法来解决。控制在 50 字以内。]
-
-### 📋 摘要中文全文
-[将英文摘要完整翻译为通顺的中文，要求尽量忠实原文，不要省略，不要缩写，不要额外发挥。]
+[概括：这篇论文要解决什么问题？（具体到场景/任务），提出了什么方法来解决（突出创新点）。控制在 80 字以内。]
 
 ---
 
@@ -287,7 +284,7 @@ SUMMARY_PROMPT = """请你作为一位资深 AI 研究员，用{language}对以�
 **摘要原文：** {abstract}
 """
 
-REQUIRED_SECTIONS = ["中文标题", "一句话总结", "摘要中文全文"]
+REQUIRED_SECTIONS = ["中文标题", "一句话总结"]
 
 def llm_category_check(client: OpenAI, paper: dict, model: str) -> bool:
     prompt = CLASSIFY_PROMPT.format(
@@ -359,14 +356,14 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                         "content": (
                             f"你是一位专业的 AI 学术论文分析助手。"
                             f"请用{language}输出。"
-                            f"只能输出三个板块：中文标题、一句话总结、摘要中文全文。"
+                            f"只能输出两个板块：中文标题、一句话总结。"
                             f"不要添加其他解释、前言、结尾。"
                         ),
                     },
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0.2,
-                max_tokens=3000,
+                max_tokens=300,
                 # ========= DeepSeek 关闭深度推理 =========
                 extra_body={"thinking": {"type": "disabled"}},
             )
@@ -523,7 +520,6 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
             cats = ", ".join(paper["categories"][:3])
 
             chinese_title = parsed["chinese_title"]
-            one_line = parsed["one_line"]
             abstract_cn = parsed["abstract_cn"]
 
             title_html = paper["title"]
@@ -558,7 +554,6 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
                     f'</div>'
                 )
 
-            abstract_html = text_to_html_paragraphs(abstract_cn) if abstract_cn else ""
             copy_text = f"{paper['title']}\n📌 {chinese_title}\n💡 {one_line}\n🔗 {paper['url']}"
 
             group_html += f"""
@@ -584,19 +579,6 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
         </div>
 
         {one_line_html}
-
-        <details style="cursor:pointer;margin-top:6px;">
-            <summary style="font-size:13px;font-weight:600;color:#667eea;
-                            padding:4px 0;user-select:none;outline:none;
-                            list-style:none;">
-                <span>📋 展开中文摘要</span>
-            </summary>
-            <div style="font-size:13px;line-height:1.6;color:#4a5568;
-                        margin-top:8px;padding:12px;background:#f7fafc;
-                        border-radius:6px;border:1px solid #edf2f7;">
-                {abstract_html}
-            </div>
-        </details>
 
         <details style="cursor:pointer;margin-top:2px;">
             <summary style="font-size:12px;font-weight:600;color:#a0aec0;

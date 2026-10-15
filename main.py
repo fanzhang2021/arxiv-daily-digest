@@ -131,7 +131,7 @@ def keyword_matches(paper: dict, keywords: list[str]) -> list[str]:
     text = (paper["title"] + " " + paper["abstract"]).lower()
     matched = []
     for kw in keywords:
-        pattern = rf"\b{re.escape(kw.lower())}\b"
+        pattern = rf"\b{re.escape(kw.lower())}"
         if re.search(pattern, text):
             matched.append(kw)
     return matched
@@ -520,7 +520,7 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
             cats = ", ".join(paper["categories"][:3])
 
             chinese_title = parsed["chinese_title"]
-            abstract_cn = parsed["abstract_cn"]
+            one_line = parsed["one_line"]
 
             title_html = paper["title"]
             matched_kw = paper.get("matched_keywords", [])

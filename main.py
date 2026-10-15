@@ -131,6 +131,7 @@ def keyword_matches(paper: dict, keywords: list[str]) -> list[str]:
     text = (paper["title"] + " " + paper["abstract"]).lower()
     matched = []
     for kw in keywords:
+        # 只卡左边界，右侧允许后缀：program 能匹配 programming / programs
         pattern = rf"\b{re.escape(kw.lower())}"
         if re.search(pattern, text):
             matched.append(kw)
@@ -267,24 +268,57 @@ NO
 摘要：{abstract}
 """
 
-SUMMARY_PROMPT = """请你作为一位资深 AI 研究员，用{language}对以下学术论文进行分析。
+SUMMARY_PROMPT = """请你作为一位严谨的 AI 与软件工程领域研究员，用{language}分析以下学术论文。
 
-请严格按照以下格式输出，每个板块都必须完整，不要遗漏，不要添加多余板块：
+请严格按照指定的三个板块输出，不得增加、删除或修改板块标题，不要输出前言、结尾或其他内容。
 
 ### 📌 中文标题
-[准确翻译英文标题，一行即可]
+准确翻译英文标题，保留专业术语的原意。
 
 ### 💡 一句话总结
-[概括：这篇论文要解决什么问题？（具体到场景/任务），提出了什么方法来解决（突出创新点）。控制在 80 字以内。]
+用一句话概括论文的研究场景或任务、主要方法和核心创新，控制在80字以内。
 
----
+### 🔬 关键科学问题
+你的核心任务是判断论文是否真正研究了关键科学问题，而不是强行从每篇论文中提炼一个问题。请先在内部完成以下判断过程，但不要输出推理过程。
+
+**第一步：识别研究目标。**
+区分论文是在提出方法、开发系统、提升性能、构建数据集/benchmark，还是进一步试图解释现象、揭示机制、验证规律或刻画适用边界。重点区分“论文做了什么”和“论文试图弄清楚什么”。
+
+**第二步：判断是否存在知识性问题。**
+重点考察论文是否试图回答以下问题之一：
+- 现象与规律：某种现象是否存在，呈现什么规律？
+- 机制与因素：哪些因素影响某种现象，如何产生影响？
+- 条件与边界：某种方法或规律在什么条件下成立、何时失效？
+- 权衡与性质：不同目标之间存在什么约束，某种性质能否被刻画或预测？
+
+这些类型仅用于辅助判断，不要求每篇论文都符合其中某一类型。
+
+**第三步：核查证据，防止牵强提炼。**
+检查标题和摘要是否有证据表明论文确实研究了上述知识性问题。提出新方法、获得性能提升、搭建系统或发布数据集/benchmark，本身不构成科学问题；只有论文进一步研究了未知的机制、关系、规律或边界，才有理由提炼科学问题。不能仅凭实验结果推断作用机制，也不能补充原文没有研究的问题。
+
+**第四步：确定结论并组织输出。**
+- 若论文明确研究了知识性问题，判定为“明确存在科学问题”。
+- 若论文没有直接提出科学问题，但研究设计或分析明确指向一个有原文依据、可验证的知识性问题，判定为“可以合理提炼科学问题”。
+- 若标题和摘要只支持工程实现、方法创新、性能改进或资源建设，没有足够证据支持存在知识性问题，判定为“无明显科学问题”。
+
+若存在科学问题，必须明确写出论文试图回答的核心问题，用1–2句话表述。问题应当具体、可验证，并具有一定的推广价值；即使去掉论文提出的具体方法或系统名称，问题依然成立。应直接提出“为什么……？”“哪些因素影响……？”“在什么条件下……？”等知识性问题，而不是复述研究目标、方法或贡献。
+
+若没有明显科学问题，不得强行拔高，应如实说明论文主要属于哪类贡献及其价值。注意，“无明显科学问题”表示仅根据标题和摘要无法充分支持这一判断，不代表论文全文一定不存在科学问题。
+
+**本板块严格按照以下格式输出，不得增加其他标题或板块：**
+
+【判定】明确存在科学问题 / 可以合理提炼科学问题 / 无明显科学问题
+
+【关键科学问题】若存在，直接写出具体的科学问句；若不存在，写明“无明显科学问题”，并简要说明论文的主要贡献及其价值。
+
+【判断依据】用一句话说明标题或摘要中的哪些研究内容支持上述判定。不得虚构原文没有提供的证据。
 
 **英文标题：** {title}
 
 **摘要原文：** {abstract}
 """
 
-REQUIRED_SECTIONS = ["中文标题", "一句话总结"]
+REQUIRED_SECTIONS = ["中文标题", "一句话总结", "关键科学问题"]
 
 def llm_category_check(client: OpenAI, paper: dict, model: str) -> bool:
     prompt = CLASSIFY_PROMPT.format(
@@ -356,16 +390,16 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                         "content": (
                             f"你是一位专业的 AI 学术论文分析助手。"
                             f"请用{language}输出。"
-                            f"只能输出两个板块：中文标题、一句话总结。"
+                            f"只能输出三个板块：中文标题、一句话总结、关键科学问题。"
                             f"不要添加其他解释、前言、结尾。"
                         ),
                     },
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0.2,
-                max_tokens=300,
-                # ========= DeepSeek 关闭深度推理 =========
-                extra_body={"thinking": {"type": "disabled"}},
+                max_tokens=1000,
+                # ========= DeepSeek 打开深度推理 =========
+                extra_body={"thinking": {"type": "enabled"}},
             )
 
             content = resp.choices[0].message.content or ""
@@ -406,6 +440,7 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
 ### 💡 一句话总结
 总结生成失败（已重试{max_retries}次）
 
+### 🔬 关键科学问题
 错误：{e}"""
 
     return "⚠️ 总结生成失败"
@@ -427,6 +462,7 @@ def parse_summary(summary_text: str) -> dict:
     return {
         "chinese_title": extract_section(summary_text, "📌 中文标题"),
         "one_line": extract_section(summary_text, "💡 一句话总结"),
+        "science_q": extract_section(summary_text, "🔬 关键科学问题"),
     }
 
 def highlight_keywords(text: str, keywords: list[str]) -> str:
@@ -444,15 +480,6 @@ def highlight_keywords(text: str, keywords: list[str]) -> str:
             text,
         )
     return text
-
-def text_to_html_paragraphs(text: str) -> str:
-    if not text:
-        return ""
-    paragraphs = [p.strip() for p in text.strip().split("\n") if p.strip()]
-    return "\n".join(
-        f"<p style='margin:3px 0;line-height:1.5;color:#333;'>{p}</p>"
-        for p in paragraphs
-    )
 
 def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_date: date, today_date: date) -> str:
     sc = config["search"]
@@ -521,6 +548,7 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
 
             chinese_title = parsed["chinese_title"]
             one_line = parsed["one_line"]
+            science_q = parsed["science_q"]
 
             title_html = paper["title"]
             matched_kw = paper.get("matched_keywords", [])
@@ -554,7 +582,24 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
                     f'</div>'
                 )
 
-            copy_text = f"{paper['title']}\n📌 {chinese_title}\n💡 {one_line}\n🔗 {paper['url']}"
+            science_q_html = ""
+            if science_q:
+                science_q_html = (
+                    f'<div style="background:#fffaf0;border-left:3px solid #dd6b20;'
+                    f'border-radius:6px;padding:10px 14px;margin:6px 0;'
+                    f'font-size:13px;color:#7b341e;line-height:1.6;">'
+                    f'<strong style="color:#c05621;">🔬 关键科学问题</strong><br>'
+                    f'{science_q}'
+                    f'</div>'
+                )
+
+            copy_text = (
+                f"{paper['title']}\n"
+                f"📌 {chinese_title}\n"
+                f"💡 {one_line}\n"
+                f"🔬 {science_q}\n"
+                f"🔗 {paper['url']}"
+            )
 
             group_html += f"""
     <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:16px;
@@ -579,6 +624,7 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
         </div>
 
         {one_line_html}
+        {science_q_html}
 
         <details style="cursor:pointer;margin-top:2px;">
             <summary style="font-size:12px;font-weight:600;color:#a0aec0;

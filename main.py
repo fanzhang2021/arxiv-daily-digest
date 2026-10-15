@@ -406,7 +406,6 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
 ### 💡 一句话总结
 总结生成失败（已重试{max_retries}次）
 
-### 📋 摘要中文全文
 错误：{e}"""
 
     return "⚠️ 总结生成失败"
@@ -428,14 +427,15 @@ def parse_summary(summary_text: str) -> dict:
     return {
         "chinese_title": extract_section(summary_text, "📌 中文标题"),
         "one_line": extract_section(summary_text, "💡 一句话总结"),
-        "abstract_cn": extract_section(summary_text, "📋 摘要中文全文"),
     }
 
 def highlight_keywords(text: str, keywords: list[str]) -> str:
     if not keywords:
         return text
     for kw in keywords:
-        pattern = re.compile(rf"\b({re.escape(kw)})\b", re.IGNORECASE)
+        # 和 keyword_matches 保持一致：只卡左边界，右侧允许后缀
+        # 用 (kw\w*) 把整个词（含后缀）一起高亮，视觉更自然
+        pattern = re.compile(rf"\b({re.escape(kw)}\w*)", re.IGNORECASE)
         text = pattern.sub(
             lambda m: (
                 f'<mark style="background:#fff3cd;padding:1px 3px;'

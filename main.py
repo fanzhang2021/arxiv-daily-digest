@@ -253,7 +253,7 @@ CLASSIFY_PROMPT = """请判断下面这篇 arXiv 论文，从研究内容上是�
 2. 分布式计算 / 并行计算 / 高性能计算（Distributed, Parallel, or High Performance Computing, cs.DC）
 
 判断标准：
-- “属于”包括：软件开发、测试、调试、程序分析、代码生成、代码理解、程序修复、构建系统、软件维护、工程实践；
+- “属于”包括：软件工程相关研究；
 - 也包括：并行计算、分布式系统、任务调度、资源管理、集群、MPI、OpenMP、GPU/HPC、性能优化、benchmarking 等；
 - 如果论文只是使用代码/软件作为应用背景，但核心研究不属于上述方向，则判为 NO；
 - 如果论文主要是 NLP、通用 AI、机器学习方法，而不是聚焦软件工程或分布式/并行/HPC问题，也判为 NO。
@@ -313,6 +313,8 @@ def llm_category_check(client: OpenAI, paper: dict, model: str) -> bool:
                 ],
                 temperature=0,
                 max_tokens=10,
+                # ========= DeepSeek 关闭深度推理 =========
+                extra_body={"thinking": {"type": "disabled"}},
             )
 
             content = (resp.choices[0].message.content or "").strip().upper()
@@ -365,6 +367,8 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                 ],
                 temperature=0.2,
                 max_tokens=3000,
+                # ========= DeepSeek 关闭深度推理 =========
+                extra_body={"thinking": {"type": "disabled"}},
             )
 
             content = resp.choices[0].message.content or ""

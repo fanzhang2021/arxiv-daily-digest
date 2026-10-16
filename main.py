@@ -398,7 +398,7 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                 temperature=0.2,
                 max_tokens=1000,
                 # ========= DeepSeek 打开深度推理 =========
-                extra_body={"thinking": {"type": "enabled"}},
+                extra_body={"thinking": {"type": "disabled"}},
             )
 
             content = resp.choices[0].message.content or ""

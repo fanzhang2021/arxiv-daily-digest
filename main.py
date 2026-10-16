@@ -272,13 +272,13 @@ SUMMARY_PROMPT = """请作为一位严谨的 AI 与软件工程领域研究员�
 
 严格按照指定的三个板块输出，不得增加其他板块。
 
-### 📌 中文标题
+### 中文标题
 准确翻译英文标题。
 
-### 💡 一句话总结
+### 一句话总结
 用一句话概括论文的研究任务、主要方法和核心创新，控制在80字以内。
 
-### 🔬 关键科学问题
+### 关键科学问题
 请先完成以下判断，不要输出详细推理过程。
 
 **判断流程与标准：**
@@ -295,15 +295,15 @@ SUMMARY_PROMPT = """请作为一位严谨的 AI 与软件工程领域研究员�
 
 若存在科学问题，必须用1–2句话直接写出论文试图回答的核心知识性问题，优先采用“为什么……？”“哪些因素影响……？”“在什么条件下……？”等明确问句，而不是复述研究目标、方法或贡献。
 
-最终严格按以下格式输出，三个小标题必须保持不变：
+最终严格按以下格式输出，三个小标题必须保持不变，且标题中不要使用任何表情符号或图标：
 
-### 📌 中文标题
+### 中文标题
 [中文标题]
 
-### 💡 一句话总结
+### 一句话总结
 [一句话总结]
 
-### 🔬 关键科学问题
+### 关键科学问题
 【判定】明确存在科学问题 / 可以合理提炼科学问题 / 无明显科学问题（三选一）
 
 【关键科学问题】[若存在，明确写出具体问题；若不存在，说明“无明显科学问题”及论文的主要贡献和价值。]
@@ -387,7 +387,9 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                         "content": (
                             f"你是一位专业的 AI 学术论文分析助手。"
                             f"请用{language}输出。"
-                            f"只能输出三个板块：中文标题、一句话总结、关键科学问题。"
+                            f"只能输出三个板块，标题必须严格使用："
+                            f"`### 中文标题`、`### 一句话总结`、`### 关键科学问题`。"
+                            f"标题中不要使用任何 emoji、图标或符号。"
                             f"不要添加其他解释、前言、结尾。"
                         ),
                     },
@@ -431,13 +433,13 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                     time.sleep(3 * attempt)
                     continue
 
-            return f"""### 📌 中文标题
+            return f"""### 中文标题
 生成失败
 
-### 💡 一句话总结
+### 一句话总结
 总结生成失败（已重试{max_retries}次）
 
-### 🔬 关键科学问题
+### 关键科学问题
 错误：{e}"""
 
     return "⚠️ 总结生成失败"
@@ -446,8 +448,12 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
 # ══════════════════════════════════════════════════
 #  5. 解析 & 构建 HTML
 # ══════════════════════════════════════════════════
-def extract_section(text: str, emoji_and_name: str) -> str:
-    pattern = rf"###\s*{re.escape(emoji_and_name)}\s*\n+(.*?)(?=\n\s*###|\Z)"
+def extract_section(text: str, name: str) -> str:
+    """从 LLM 输出中提取指定板块的内容。
+    name 为板块名（不含 emoji），例如「中文标题」。
+    兼容 ###/##/#### 等 markdown 标题形式。
+    """
+    pattern = rf"#{{2,}}\s*{re.escape(name)}\s*\n+(.*?)(?=\n\s*#{{2,}}|\Z)"
     m = re.search(pattern, text, re.DOTALL)
     if m:
         result = m.group(1).strip()
@@ -457,9 +463,9 @@ def extract_section(text: str, emoji_and_name: str) -> str:
 
 def parse_summary(summary_text: str) -> dict:
     return {
-        "chinese_title": extract_section(summary_text, "📌 中文标题"),
-        "one_line": extract_section(summary_text, "💡 一句话总结"),
-        "science_q": extract_section(summary_text, "🔬 关键科学问题"),
+        "chinese_title": extract_section(summary_text, "中文标题"),
+        "one_line": extract_section(summary_text, "一句话总结"),
+        "science_q": extract_section(summary_text, "关键科学问题"),
     }
 
 def highlight_keywords(text: str, keywords: list[str]) -> str:

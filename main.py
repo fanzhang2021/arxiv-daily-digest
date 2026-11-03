@@ -195,7 +195,8 @@ def fetch_papers(config: dict) -> tuple[list[dict], date, date]:
 
         if pub_date < cutoff_date:
             skipped_by_date += 1
-            continue
+            logger.info(f"⏹️ 已扫描到时间窗外论文（{pub_date} < {cutoff_date}），停止扫描。")
+            break
 
         paper = {
             "title": result.title.replace("\n", " "),
@@ -270,52 +271,23 @@ NO
 
 SUMMARY_PROMPT = """请作为一位严谨的 AI 与软件工程领域研究员，用{language}分析以下论文。
 
-严格按照指定的三个板块输出，不得增加其他板块。
+严格按照以下三个板块输出，不得增加其他板块，标题中不要使用任何表情符号或图标：
 
 ### 中文标题
-准确翻译英文标题。
+[准确翻译英文标题，一行即可]
 
 ### 一句话总结
-概括：这篇论文要解决什么问题？（具体到场景/任务等），提出了什么方法来解决（突出创新点）。控制在 80 字以内。
+[概括：这篇论文要解决什么问题（具体到场景/任务），提出了什么方法来解决（突出创新点）。控制在 80 字以内。]
 
-### 关键科学问题
-请先完成以下判断，不要输出详细推理过程。
-
-**判断流程与标准：**
-
-1. **识别研究目标。** 区分论文的工程目标与知识性问题。提出新方法、开发系统、提升性能、构建数据集或benchmark，本身不等于提出科学问题；但这些工作也可能进一步揭示规律、解释机制或刻画边界。
-
-2. **判断是否存在未知问题。** 检查论文是否试图解释某种现象、研究影响因素及其作用机制、验证某种规律，或刻画方法的适用条件与失效边界。重点区分“实现了什么”与“发现或解释了什么”。
-
-3. **检验问题的质量。** 真正的科学问题应针对尚待解释、验证或刻画的知识，具有可验证性和一定的推广价值。去掉论文的具体方法或系统名称后，问题仍应成立，但不能脱离原文场景过度泛化。不要把“如何提高性能”直接当作科学问题，也不要把性能提升直接解释为作用机制。
-
-4. **核查证据并作出判定。** 只能依据提供的标题和摘要判断，可使用其中明确描述的研究目标、研究内容、实验比较、研究发现或局限性作为证据，不得假定自己了解论文全文。明确研究了知识性问题，判定为“明确存在科学问题”；未直接提出问题，但可以从摘要内容合理提炼，判定为“可以合理提炼科学问题”；若现有材料仅支持工程实现、方法贡献或资源建设，判定为“无明显科学问题”。若标题和摘要没有提供足够证据，必须说明证据不足，不得臆造研究机制、实验设计或作者未表达的研究意图。这里的“无明显科学问题”仅表示现有材料不足以支持该判断，不代表论文全文一定不存在科学问题。
-
-**输出要求：**
-
-若存在科学问题，必须用1–2句话直接写出论文试图回答的核心知识性问题，优先采用“为什么……？”“哪些因素影响……？”“在什么条件下……？”等明确问句，而不是复述研究目标、方法或贡献。
-
-最终严格按以下格式输出，三个小标题必须保持不变，且标题中不要使用任何表情符号或图标：
-
-### 中文标题
-[中文标题]
-
-### 一句话总结
-[一句话总结]
-
-### 关键科学问题
-【判定】明确存在科学问题 / 可以合理提炼科学问题 / 无明显科学问题（三选一）
-
-【关键科学问题】[若存在，明确写出具体问题；若不存在，说明“无明显科学问题”及论文的主要贡献和价值。]
-
-【判断依据】[用一句话指出标题或摘要中的具体信息为何支持这一判定；若信息不足，明确说明缺少什么证据。]
+### 摘要中文全文
+[将英文摘要完整翻译为通顺的中文。要求：忠实原文，不省略、不缩写、不额外发挥；保持学术表达，术语准确。]
 
 **英文标题：** {title}
 
 **摘要原文：** {abstract}
 """
 
-REQUIRED_SECTIONS = ["中文标题", "一句话总结", "关键科学问题"]
+REQUIRED_SECTIONS = ["中文标题", "一句话总结", "摘要中文全文"]
 
 def llm_category_check(client: OpenAI, paper: dict, model: str) -> bool:
     prompt = CLASSIFY_PROMPT.format(
@@ -388,7 +360,7 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                             f"你是一位专业的 AI 学术论文分析助手。"
                             f"请用{language}输出。"
                             f"只能输出三个板块，标题必须严格使用："
-                            f"`### 中文标题`、`### 一句话总结`、`### 关键科学问题`。"
+                            f"`### 中文标题`、`### 一句话总结`、`### 摘要中文全文`。"
                             f"标题中不要使用任何 emoji、图标或符号。"
                             f"不要添加其他解释、前言、结尾。"
                         ),
@@ -396,8 +368,8 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0.2,
-                max_tokens=1000,
-                # ========= DeepSeek 打开深度推理 =========
+                max_tokens=3000,
+                # ========= DeepSeek 关闭深度推理 =========
                 extra_body={"thinking": {"type": "disabled"}},
             )
 
@@ -439,7 +411,7 @@ def summarize_paper(client: OpenAI, paper: dict, model: str, language: str) -> s
 ### 一句话总结
 总结生成失败（已重试{max_retries}次）
 
-### 关键科学问题
+### 摘要中文全文
 错误：{e}"""
 
     return "⚠️ 总结生成失败"
@@ -465,7 +437,7 @@ def parse_summary(summary_text: str) -> dict:
     return {
         "chinese_title": extract_section(summary_text, "中文标题"),
         "one_line": extract_section(summary_text, "一句话总结"),
-        "science_q": extract_section(summary_text, "关键科学问题"),
+        "abstract_cn": extract_section(summary_text, "摘要中文全文"),
     }
 
 def highlight_keywords(text: str, keywords: list[str]) -> str:
@@ -483,6 +455,15 @@ def highlight_keywords(text: str, keywords: list[str]) -> str:
             text,
         )
     return text
+
+def text_to_html_paragraphs(text: str) -> str:
+    if not text:
+        return ""
+    paragraphs = [p.strip() for p in text.strip().split("\n") if p.strip()]
+    return "\n".join(
+        f"<p style='margin:3px 0;line-height:1.5;color:#333;'>{p}</p>"
+        for p in paragraphs
+    )
 
 def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_date: date, today_date: date) -> str:
     sc = config["search"]
@@ -551,7 +532,7 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
 
             chinese_title = parsed["chinese_title"]
             one_line = parsed["one_line"]
-            science_q = parsed["science_q"]
+            abstract_cn = parsed["abstract_cn"]
 
             title_html = paper["title"]
             matched_kw = paper.get("matched_keywords", [])
@@ -585,22 +566,12 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
                     f'</div>'
                 )
 
-            science_q_html = ""
-            if science_q:
-                science_q_html = (
-                    f'<div style="background:#fffaf0;border-left:3px solid #dd6b20;'
-                    f'border-radius:6px;padding:10px 14px;margin:6px 0;'
-                    f'font-size:13px;color:#7b341e;line-height:1.6;">'
-                    f'<strong style="color:#c05621;">🔬 关键科学问题</strong><br>'
-                    f'{science_q}'
-                    f'</div>'
-                )
+            abstract_html = text_to_html_paragraphs(abstract_cn) if abstract_cn else ""
 
             copy_text = (
                 f"{paper['title']}\n"
                 f"📌 {chinese_title}\n"
                 f"💡 {one_line}\n"
-                f"🔬 {science_q}\n"
                 f"🔗 {paper['url']}"
             )
 
@@ -627,7 +598,19 @@ def build_html(papers: list[dict], summaries: list[str], config: dict, cutoff_da
         </div>
 
         {one_line_html}
-        {science_q_html}
+
+        <details style="cursor:pointer;margin-top:6px;">
+            <summary style="font-size:13px;font-weight:600;color:#667eea;
+                            padding:4px 0;user-select:none;outline:none;
+                            list-style:none;">
+                <span>📋 展开中文摘要</span>
+            </summary>
+            <div style="font-size:13px;line-height:1.6;color:#4a5568;
+                        margin-top:8px;padding:12px;background:#f7fafc;
+                        border-radius:6px;border:1px solid #edf2f7;">
+                {abstract_html}
+            </div>
+        </details>
 
         <details style="cursor:pointer;margin-top:2px;">
             <summary style="font-size:12px;font-weight:600;color:#a0aec0;
